@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RecyclerViewPlayer</string>
+    <string name="button_play">play</string>
+    <string name="button_forward">forward</string>
+    <string name="button_back">back</string>
+</resources>
