@@ -38,16 +38,36 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void onTrueClick(View view) {
-        Toast.makeText(QuizActivity.this, R.string.incorrect_toast, Toast.LENGTH_SHORT).show();
+        checkAnswer(true);
+        //Toast.makeText(QuizActivity.this, R.string.incorrect_toast, Toast.LENGTH_SHORT).show();
     }
 
     public void onFalseClick(View view) {
-        Toast.makeText(QuizActivity.this, R.string.correct_toast, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(QuizActivity.this, R.string.correct_toast, Toast.LENGTH_SHORT).show();
+        checkAnswer(false);
+    }
+
+    public void updateQuestion() {
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mQuestionTextView.setText(question);
     }
 
     public void onNextClick(View view) {
         mCurrentIndex = (mCurrentIndex+1) % mQuestionBank.length;
-        int question = mQuestionBank[mCurrentIndex].getTextResId();
-        mQuestionTextView.setText(question);
+        updateQuestion();
+    }
+
+    private void checkAnswer (boolean usedPressedTrue){
+        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+
+        int messageResId = 0;
+
+        if(usedPressedTrue == answerIsTrue){
+            messageResId = R.string.correct_toast;
+        } else {
+            messageResId = R.string.incorrect_toast;
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 }
