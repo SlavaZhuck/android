@@ -1,56 +1,62 @@
 package com.example.juk_va.recyclerviewplayer;
 
-import android.database.Cursor;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.provider.MediaStore;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import android.net.Uri;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.view.View;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
-    MediaPlayer mediaPlayer;
-    MediaStore.Audio.Media mMediaStoreAudio;
-    final String track_id = MediaStore.Audio.Media._ID;
-    final String track_no = MediaStore.Audio.Media.TRACK;
-    final String track_name = MediaStore.Audio.Media.TITLE;
-    final String artist = MediaStore.Audio.Media.ARTIST;
-    final String duration = MediaStore.Audio.Media.DURATION;
-    final String album = MediaStore.Audio.Media.ALBUM;
-    final String composer = MediaStore.Audio.Media.COMPOSER;
-    final String year = MediaStore.Audio.Media.YEAR;
-    final String path = MediaStore.Audio.Media.DATA;
-    final String date_added = MediaStore.Audio.Media.DATE_ADDED;
-    Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-    ArrayList audio=new ArrayList();
-
-    AudioManager am;
-    private RecyclerView rv;
-    final String LOG_TAG = "myLogs";
+    private ArrayList<Song> songList;
+    private ListView songView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        mMediaStoreAudio = new MediaStore.Audio.Media();
-        Uri uri = MediaStore.Audio.Media.getContentUri("external");
-        String[] proj = { MediaStore.Audio.Media.DATA };
-        int size = proj.length;
-        String song = proj[0];
-        rv = (RecyclerView)findViewById(R.id.recyclerView);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
+        songView = (ListView)findViewById(R.id.song_list);
+        songList = new ArrayList<Song>();
+        getSongList();
+        Collections.sort(songList, new Comparator<Song>(){
+            public int compare(Song a, Song b){
+                return a.getTitle().compareTo(b.getTitle());
+            }
+        });
+        SongAdapter songAdt = new SongAdapter(this, songList);
+        songView.setAdapter(songAdt);
+
     }
 
+    public void getSongList() {
+        //retrieve song info
+        ContentResolver musicResolver = getContentResolver();
+        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        if(musicCursor!=null && musicCursor.moveToFirst()){
+            //get columns
+            int titleColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.TITLE);
+            int idColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media._ID);
+            int artistColumn = musicCursor.getColumnIndex
+                    (android.provider.MediaStore.Audio.Media.ARTIST);
+            //add songs to list
+            do {
+                long thisId = musicCursor.getLong(idColumn);
+                String thisTitle = musicCursor.getString(titleColumn);
+                String thisArtist = musicCursor.getString(artistColumn);
+                songList.add(new Song(thisId, thisTitle, thisArtist));
+            }
+            while (musicCursor.moveToNext());
+        }
+
+    }
 
     public void onClickBack(View view) {
 
