@@ -1,36 +1,55 @@
 package com.example.juk_va.recyclerviewplayer;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Admin on 18.09.2017.
  */
 
-public class SongAdapter extends BaseAdapter {
-    private ArrayList<Song> songs;
-    private LayoutInflater songInf;
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 
-    public SongAdapter(Context c, ArrayList<Song> theSongs){
-        songs=theSongs;
-        songInf=LayoutInflater.from(c);
+
+    public static class SongViewHolder extends RecyclerView.ViewHolder {
+
+        TextView songTitle;
+        TextView songArtist;
+
+        SongViewHolder(View itemView) {
+            super(itemView);
+            songTitle = (TextView)itemView.findViewById(R.id.song_title);
+            songArtist = (TextView)itemView.findViewById(R.id.song_artist);
+        }
     }
-    @Override
-    public int getCount() {
-        return songs.size();
+
+    ArrayList<Song> songs;
+
+    SongAdapter(ArrayList<Song> songs){
+        this.songs = songs;
     }
 
     @Override
-    public Object getItem(int arg0) {
-        // TODO Auto-generated method stub
-        return null;
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.song, parent, false);
+        SongViewHolder pvh = new SongViewHolder(v);
+        return pvh;
+    }
+
+    @Override
+    public void onBindViewHolder(SongViewHolder songViewHolder, int position) {
+        songViewHolder.songTitle.setText(songs.get(position).getTitle());
+        songViewHolder.songArtist.setText(songs.get(position).getArtist());
     }
 
     @Override
@@ -40,21 +59,7 @@ public class SongAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        //map to song layout
-        LinearLayout songLay = (LinearLayout)songInf.inflate
-                (R.layout.song, parent, false);
-        //get title and artist views
-        TextView songView = (TextView)songLay.findViewById(R.id.song_title);
-        TextView artistView = (TextView)songLay.findViewById(R.id.song_artist);
-        //get song using position
-        Song currSong = songs.get(position);
-        //get title and artist strings
-        songView.setText(currSong.getTitle());
-        artistView.setText(currSong.getArtist());
-        //set position as tag
-        songLay.setTag(position);
-        return songLay;
+    public int getItemCount() {
+        return songs.size();
     }
-
 }
