@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mSong;
     private TextView mArtist;
-    private int mSongNumber;
+    private int mSongNumber=0;
     MediaPlayer mediaPlayer;
 
     private static boolean pressed = false;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         mSong = (TextView)findViewById(R.id.song) ;
         mArtist = (TextView)findViewById(R.id.artist) ;
 
-        songList = new ArrayList<Song>();
+        songList = new ArrayList<>();
         getSongList();
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -81,15 +81,19 @@ public class MainActivity extends AppCompatActivity {
             }
             while (musicCursor.moveToNext());
         }
+        musicCursor.close();
     }
 
     private void initializeAdapter(){
-        SongAdapter adapter = new SongAdapter(songList);
+        RecycleViewSongAdapter adapter = new RecycleViewSongAdapter(songList);
         mRV.setAdapter(adapter);
     }
 
     public void onClickBack(View view) {
-        mSongNumber--;
+        if(mSongNumber == 0)
+            mSongNumber = songList.size()-1;
+        else
+            mSongNumber--;
         mSong.setText(songList.get(mSongNumber).getTitle());
         mArtist.setText(songList.get(mSongNumber).getArtist());
         playSong();
@@ -104,7 +108,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickForward(View view) {
-        mSongNumber++;
+        if(mSongNumber == songList.size()-1)
+            mSongNumber = 0;
+        else
+            mSongNumber++;
+
         mSong.setText(songList.get(mSongNumber).getTitle());
         mArtist.setText(songList.get(mSongNumber).getArtist());
         playSong();

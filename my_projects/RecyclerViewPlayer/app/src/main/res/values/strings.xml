@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RecyclerViewPlayer</string>
-    <string name="button_play">play</string>
-    <string name="button_forward">forward</string>
-    <string name="button_back">back</string>
+    <string name="button_play">Плей(Пауза)</string>
+    <string name="button_forward">Вперед</string>
+    <string name="button_back">Назад</string>
+    <string name="text_artist">Исполнитель</string>
+    <string name="text_song">Песня</string>
 </resources>

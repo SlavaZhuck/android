@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Admin on 18.09.2017.
  */
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+public class RecycleViewSongAdapter extends RecyclerView.Adapter<RecycleViewSongAdapter.SongViewHolder> {
 
 
     public static class SongViewHolder extends RecyclerView.ViewHolder {
@@ -23,14 +22,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
         SongViewHolder(View itemView) {
             super(itemView);
-            songTitle = (TextView)itemView.findViewById(R.id.song_title);
-            songArtist = (TextView)itemView.findViewById(R.id.song_artist);
+            songTitle = itemView.findViewById(R.id.song_title);
+            songArtist = itemView.findViewById(R.id.song_artist);
         }
     }
 
     ArrayList<Song> songs;
 
-    SongAdapter(ArrayList<Song> songs){
+    RecycleViewSongAdapter(ArrayList<Song> songs){
         this.songs = songs;
     }
 
