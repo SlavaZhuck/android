@@ -22,10 +22,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> mSongList;
     private RecyclerView mRV;
     private TextView mSong;
+    private final long delayForButtons = 400;
     private TextView mArtist;
     private int mSongNumber = 0;
-
+    private boolean mButtonClick = false;
+    public static long mTimeStamp = 0;
     MediaPlayer mediaPlayer;
+    private Thread t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +52,26 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickListener(this.getBaseContext(), mRV, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        mSong.setText(mSongList.get(position).getTitle());
-                        mArtist.setText(mSongList.get(position).getArtist());
+                        setDataText(position);
                         mSongNumber = position;
                         playSong();
                     }
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
                 })
         );
+
+        t = new Thread(new Runnable() {
+            public void run() {
+                while(true) {
+                    if (mButtonClick == true) {
+                        if (System.currentTimeMillis() - mTimeStamp == delayForButtons) {
+                            playSong();
+                            mButtonClick = false;
+                        }
+                    }
+                }
+            }
+        });
+        t.start();
     }
 
     public void getmSongList() {
@@ -93,14 +104,19 @@ public class MainActivity extends AppCompatActivity {
         mRV.setAdapter(adapter);
     }
 
+    private void setDataText(int pos) {
+        mSong.setText(mSongList.get(pos).getTitle());
+        mArtist.setText(mSongList.get(pos).getArtist());
+    }
+
     public void onClickBack(View view) {
+        mButtonClick = true;
+        mTimeStamp = System.currentTimeMillis();
         if (mSongNumber == 0)
             mSongNumber = mSongList.size() - 1;
         else
             mSongNumber--;
-        mSong.setText(mSongList.get(mSongNumber).getTitle());
-        mArtist.setText(mSongList.get(mSongNumber).getArtist());
-        playSong();
+        setDataText(mSongNumber);
     }
 
     public void onClickPlay(View view) {
@@ -112,20 +128,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickForward(View view) {
+        mButtonClick = true;
+        mTimeStamp = System.currentTimeMillis();
         if (mSongNumber == mSongList.size() - 1)
             mSongNumber = 0;
         else
             mSongNumber++;
-
-        mSong.setText(mSongList.get(mSongNumber).getTitle());
-        mArtist.setText(mSongList.get(mSongNumber).getArtist());
-        playSong();
+        setDataText(mSongNumber);
     }
 
     public void playSong() {
         mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = new MediaPlayer();
+        mediaPlayer.reset();
         int currentAudio = (int) mSongList.get(mSongNumber).getID();
         Uri trackUri = ContentUris.withAppendedId(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
