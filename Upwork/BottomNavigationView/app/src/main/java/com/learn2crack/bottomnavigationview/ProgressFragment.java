@@ -98,24 +98,15 @@ public class ProgressFragment extends Fragment {
                 ArrayList<String> prayerNameS = new ArrayList<String>();
                 ArrayList<String> prayerNameTimeS = new ArrayList<String>();
                 ArrayList<String> prayerTimeS = new ArrayList<String>();
-                String temp ;
+
                 int i = 0;
                 for(Element titles: prayerName){
                     prayerNameS.add(prayerName.get(i).text());
-                    i++;
-                }
-
-                i = 0;
-                for(Element titles: prayerName){
                     prayerTimeS.add(prayerTime.get(i).text());
+                    prayerNameTimeS.add(prayerName.get(i).text()+ " " + prayerTime.get(i).text());
                     i++;
                 }
 
-                i = 0;
-                for(Element titles: prayerName){
-                    prayerNameTimeS.add(prayerNameS.get(i)+ " " + prayerTimeS.get(i));
-                    i++;
-                }
                 // чистим наш аррей лист для того что бы заполнить
                 titleList.clear();
 
