@@ -20,16 +20,13 @@
     <fragment
         android:id="@+id/contentFragment"
         android:name="com.learn2crack.bottomnavigationview.ProgressFragment"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="66dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginTop="97dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.002"
-        tools:layout="@layout/fragment_progress"/>
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        tools:layout="@layout/fragment_progress"
+        />
 
 </android.support.constraint.ConstraintLayout>

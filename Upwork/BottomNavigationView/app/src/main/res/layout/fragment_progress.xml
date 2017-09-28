@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
@@ -7,19 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Загрузка" />
-    <WebView
-        android:layout_weight="1"
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
-    <ScrollView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
 
-        <TextView android:id="@+id/content"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent" />
-    </ScrollView>
 
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="0.5"
+        android:visibility="visible"/>
 </LinearLayout>
