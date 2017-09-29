@@ -1,17 +1,28 @@
 package com.learn2crack.bottomnavigationview;
 
 import android.app.FragmentTransaction;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+public class MainActivity extends AppCompatActivity   {
 
     private BottomNavigationView mBottomNavigationView;
-   // private Toolbar mAppToolBar;
+    public GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private TextView mLatitudeText;
+    private TextView mLongitudeText;
+
+    // private Toolbar mAppToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(dateString);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
-
 
         if (savedInstanceState == null) {
             loadHomeFragment();
@@ -103,4 +113,5 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
     }
+
 }

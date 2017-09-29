@@ -20,8 +20,8 @@
     <fragment
         android:id="@+id/contentFragment"
         android:name="com.learn2crack.bottomnavigationview.ProgressFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
         android:layout_marginTop="97dp"
         app:layout_constraintLeft_toLeftOf="parent"

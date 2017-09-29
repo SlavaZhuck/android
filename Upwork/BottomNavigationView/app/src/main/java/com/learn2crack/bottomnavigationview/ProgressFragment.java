@@ -66,18 +66,18 @@ public class ProgressFragment extends Fragment {
       //      contentView.setText(contentText);
       //      webView.loadData(contentText, "text/html; charset=utf-8", "utf-8");
         }
+        new ProgressTask().execute();
+        //Button btnFetch = (Button)view.findViewById(R.id.downloadBtn);
+        //btnFetch.setOnClickListener(new View.OnClickListener() {
+       //     @Override
+        //    public void onClick(View v) {
 
-        Button btnFetch = (Button)view.findViewById(R.id.downloadBtn);
-        btnFetch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(contentText==null){
+        //        if(contentText==null){
                 //    contentView.setText("Загрузка...");
-                    new ProgressTask().execute("https://developer.android.com/index.html");
-                }
-            }
-        });
+                  //  new ProgressTask().execute("https://developer.android.com/index.html");
+       //         }
+       //     }
+       // });
         return view;
     }
 
@@ -127,15 +127,16 @@ public class ProgressFragment extends Fragment {
                 e.printStackTrace();
             }
             //
-            String content;
-            try{
-                content = getContent(path[0]);
-            }
-            catch (IOException ex){
-                content = ex.getMessage();
-            }
+//            String content;
+//            try{
+//                content = getContent(path[0]);
+//            }
+//            catch (IOException ex){
+//                content = ex.getMessage();
+//            }
 
-            return content;
+//            return content;
+            return null;
         }
         @Override
         protected void onPostExecute(String content) {
@@ -143,7 +144,7 @@ public class ProgressFragment extends Fragment {
             contentText=content;
           //  contentView.setText(content);
            // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
-            Toast.makeText(getActivity(), "Данные загружены", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT)
                     .show();
             lv.setAdapter(adapter);
         }
