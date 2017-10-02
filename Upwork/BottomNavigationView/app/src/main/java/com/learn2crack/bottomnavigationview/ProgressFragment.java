@@ -46,6 +46,7 @@ public class ProgressFragment extends Fragment {
     TextView contentView;
     String contentText = null;
     WebView webView;
+    ProgressTask progressTask;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +67,7 @@ public class ProgressFragment extends Fragment {
       //      contentView.setText(contentText);
       //      webView.loadData(contentText, "text/html; charset=utf-8", "utf-8");
         }
-        new ProgressTask().execute();
+        progressTask = (ProgressTask) new ProgressTask().execute();
         //Button btnFetch = (Button)view.findViewById(R.id.downloadBtn);
         //btnFetch.setOnClickListener(new View.OnClickListener() {
        //     @Override
@@ -79,6 +80,18 @@ public class ProgressFragment extends Fragment {
        //     }
        // });
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        progressTask.cancel(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressTask.cancel(true);
     }
 
     private class ProgressTask extends AsyncTask<String, Void, String> {
