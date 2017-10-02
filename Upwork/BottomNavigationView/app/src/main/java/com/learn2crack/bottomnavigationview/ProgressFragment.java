@@ -69,8 +69,6 @@ public class ProgressFragment extends Fragment {
         adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
         progressTask = (ProgressTask) new ProgressTask().execute();
 
-
-
         return view;
     }
 
