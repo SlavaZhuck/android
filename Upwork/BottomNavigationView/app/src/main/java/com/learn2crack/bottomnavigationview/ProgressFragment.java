@@ -69,10 +69,24 @@ public class ProgressFragment extends Fragment {
         adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
         progressTask = (ProgressTask) new ProgressTask().execute();
 
+
+
+        return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        progressTask.cancel(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         MainActivity.Settings=this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
         int size= MainActivity.Settings.getInt("MyArraySize", 0); //читаем размер массива
         //if(size==0)
-       //     return 0;
+        //     return 0;
         String[] a=new String[size]; //аллоцируем массив
         for(int i=0; i < a.length; i++)
             a[i]=MainActivity.Settings.getString("MyArray"+i, null); //заполняем элементы массив
@@ -85,14 +99,6 @@ public class ProgressFragment extends Fragment {
             titleList.add(titles);
         }
         lv.setAdapter(adapter);
-
-        return view;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        progressTask.cancel(true);
     }
 
     @Override
@@ -101,10 +107,12 @@ public class ProgressFragment extends Fragment {
         progressTask.cancel(true);
         MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = MainActivity.Settings.edit();
-        editor.putInt("MyArraySize", prayerNameTimeS.size());
-        for(int i=0; i < prayerNameTimeS.size(); i++)
-            editor.putString("MyArray"+i, prayerNameTimeS.get(i)); //складываем элементы массива
-        editor.commit();
+        if(prayerNameTimeS.size()>0) {
+            editor.putInt("MyArraySize", prayerNameTimeS.size());
+            for (int i = 0; i < prayerNameTimeS.size(); i++)
+                editor.putString("MyArray" + i, prayerNameTimeS.get(i)); //складываем элементы массива
+            editor.commit();
+        }
     }
 
     private class ProgressTask extends AsyncTask<String, Void, String> {
