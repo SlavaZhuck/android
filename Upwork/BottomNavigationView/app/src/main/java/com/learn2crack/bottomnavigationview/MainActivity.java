@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private TextView mLonTextView;
     private String provider;
     private Location mLocation;
+    public static List<Address> addresses;
     // это будет именем файла настроек
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onLocationChanged(Location location) {
         double lat = (double) (location.getLatitude());
         double lon = (double) (location.getLongitude());
-        List<Address> addresses;
+
         try {
             addresses =  geocoder.getFromLocation(lat, lon,1);
             mLatTextView.setText(addresses.get(0).getAddressLine(0));

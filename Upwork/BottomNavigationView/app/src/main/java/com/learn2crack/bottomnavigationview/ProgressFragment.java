@@ -45,7 +45,7 @@ public class ProgressFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     // List view
     private ListView lv;
-
+    private TextView city;
     TextView contentView;
     String contentText = null;
     WebView webView;
@@ -66,7 +66,7 @@ public class ProgressFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
-        adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
+       adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
         progressTask = (ProgressTask) new ProgressTask().execute();
 
         return view;
@@ -96,7 +96,11 @@ public class ProgressFragment extends Fragment {
             // записываем в аррей лист
             titleList.add(titles);
         }
+        city = (TextView) this.getActivity().findViewById(R.id.city);
+        city.setText(MainActivity.addresses.get(0).getLocality());
+
         lv.setAdapter(adapter);
+
     }
 
     @Override
