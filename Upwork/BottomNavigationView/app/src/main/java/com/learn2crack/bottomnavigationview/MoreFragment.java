@@ -13,11 +13,15 @@ import android.view.ViewGroup;
 
 public class MoreFragment extends Fragment {
 
-    public static MoreFragment newInstance() {
+//    public static MoreFragment newInstance() {
+//
+//        return new MoreFragment();
+//    }
+    private static MoreFragment m_A = new MoreFragment();
 
-        return new MoreFragment();
+    static MoreFragment getMoreFragment() {
+        return m_A;
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

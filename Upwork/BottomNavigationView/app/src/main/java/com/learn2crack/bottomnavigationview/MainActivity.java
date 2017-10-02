@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // это будет именем файла настроек
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
-    private SharedPreferences mSettings;
+    public static SharedPreferences Settings;
 
     // private Toolbar mAppToolBar;
     @Override
@@ -91,8 +91,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             mLonTextView.setText("Location not available");
         }
 
-        //saving data
-        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
 
     }
 
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void loadHomeFragment() {
 
-        HomeFragment fragment = HomeFragment.newInstance();
+        HomeFragment fragment = HomeFragment.getHomeFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void loadDuaFragment() {
 
-        DuaFragment fragment = DuaFragment.newInstance();
+        DuaFragment fragment = DuaFragment.getDuaFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void loadNavigationFragment() {
 
-        NavigationFragment fragment = NavigationFragment.newInstance();
+        NavigationFragment fragment = NavigationFragment.getNavigationFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void loadQuranFragment() {
 
-        QuranFragment fragment = QuranFragment.newInstance();
+        QuranFragment fragment = QuranFragment.getQuranFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void loadMoreFragment() {
 
-        MoreFragment fragment = MoreFragment.newInstance();
+        MoreFragment fragment = MoreFragment.getMoreFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();

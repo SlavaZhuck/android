@@ -4,8 +4,11 @@ package com.learn2crack.bottomnavigationview;
  * Created by Juk_VA on 27.09.2017.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +50,10 @@ public class ProgressFragment extends Fragment {
     String contentText = null;
     WebView webView;
     ProgressTask progressTask;
+    ArrayList<String> prayerNameS = new ArrayList<String>();
+    ArrayList<String> prayerNameTimeS = new ArrayList<String>();
+    ArrayList<String> prayerTimeS = new ArrayList<String>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,27 +65,27 @@ public class ProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
-       // contentView = (TextView) view.findViewById(R.id.content);
-       // webView = (WebView) view.findViewById(R.id.webView);
         lv = (ListView) view.findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
-        // если данные ранее были загружены
-        if(contentText!=null){
-      //      contentView.setText(contentText);
-      //      webView.loadData(contentText, "text/html; charset=utf-8", "utf-8");
-        }
         progressTask = (ProgressTask) new ProgressTask().execute();
-        //Button btnFetch = (Button)view.findViewById(R.id.downloadBtn);
-        //btnFetch.setOnClickListener(new View.OnClickListener() {
-       //     @Override
-        //    public void onClick(View v) {
 
-        //        if(contentText==null){
-                //    contentView.setText("Загрузка...");
-                  //  new ProgressTask().execute("https://developer.android.com/index.html");
-       //         }
-       //     }
-       // });
+        MainActivity.Settings=this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
+        int size= MainActivity.Settings.getInt("MyArraySize", 0); //читаем размер массива
+        //if(size==0)
+       //     return 0;
+        String[] a=new String[size]; //аллоцируем массив
+        for(int i=0; i < a.length; i++)
+            a[i]=MainActivity.Settings.getString("MyArray"+i, null); //заполняем элементы массив
+        titleList.clear();
+        //saving data
+        // и в цикле захватываем все данные какие есть на странице
+
+        for (String titles : a) {
+            // записываем в аррей лист
+            titleList.add(titles);
+        }
+        lv.setAdapter(adapter);
+
         return view;
     }
 
@@ -92,6 +99,12 @@ public class ProgressFragment extends Fragment {
     public void onPause() {
         super.onPause();
         progressTask.cancel(true);
+        MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = MainActivity.Settings.edit();
+        editor.putInt("MyArraySize", prayerNameTimeS.size());
+        for(int i=0; i < prayerNameTimeS.size(); i++)
+            editor.putString("MyArray"+i, prayerNameTimeS.get(i)); //складываем элементы массива
+        editor.commit();
     }
 
     private class ProgressTask extends AsyncTask<String, Void, String> {
@@ -108,9 +121,9 @@ public class ProgressFragment extends Fragment {
                 Elements prayerName = doc.getElementsByClass("prayer-name");
                 Elements prayerTime= doc.getElementsByClass("prayer-time");
 
-                ArrayList<String> prayerNameS = new ArrayList<String>();
-                ArrayList<String> prayerNameTimeS = new ArrayList<String>();
-                ArrayList<String> prayerTimeS = new ArrayList<String>();
+                 prayerNameS = new ArrayList<String>();
+                 prayerNameTimeS = new ArrayList<String>();
+                 prayerTimeS = new ArrayList<String>();
 
                 int i = 0;
                 for(Element titles: prayerName){
@@ -122,15 +135,16 @@ public class ProgressFragment extends Fragment {
 
                 // чистим наш аррей лист для того что бы заполнить
                 titleList.clear();
-
-
+                //saving data
                 // и в цикле захватываем все данные какие есть на странице
 
                 for (String titles : prayerNameTimeS) {
                     // записываем в аррей лист
                     titleList.add(titles);
                 }
-               // for (Element titles : prayerTime) {
+
+
+                // for (Element titles : prayerTime) {
                     // записываем в аррей лист
                //     titleList.add(titles.text());
                // }

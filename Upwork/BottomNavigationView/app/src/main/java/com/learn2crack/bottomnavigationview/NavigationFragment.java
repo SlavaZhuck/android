@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 
 public class NavigationFragment extends Fragment {
 
-    public static NavigationFragment newInstance() {
+//    public static NavigationFragment newInstance() {
+//
+//        return new NavigationFragment();
+//    }
+    private static NavigationFragment m_A = new NavigationFragment();
 
-        return new NavigationFragment();
+    static NavigationFragment getNavigationFragment() {
+        return m_A;
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

@@ -9,9 +9,15 @@ import android.view.ViewGroup;
 
 public class HomeFragment extends Fragment {
 
-    public static HomeFragment newInstance() {
+   // public static HomeFragment newInstance() {
 
-        return new HomeFragment();
+   //     return new HomeFragment();
+   // }
+
+    private static HomeFragment m_A = new HomeFragment();
+
+    static HomeFragment getHomeFragment() {
+        return m_A;
     }
 
     @Nullable

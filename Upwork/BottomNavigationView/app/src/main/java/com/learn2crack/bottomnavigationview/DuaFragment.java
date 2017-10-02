@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 
 public class DuaFragment extends Fragment {
 
-    public static DuaFragment newInstance() {
+//    public static DuaFragment newInstance() {
+//
+//        return new DuaFragment();
+//    }
+    private static DuaFragment m_A = new DuaFragment();
 
-        return new DuaFragment();
+    static DuaFragment getDuaFragment() {
+        return m_A;
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

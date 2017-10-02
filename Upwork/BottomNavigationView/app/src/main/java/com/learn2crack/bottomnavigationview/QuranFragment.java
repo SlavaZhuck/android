@@ -13,11 +13,15 @@ import android.view.ViewGroup;
 
 public class QuranFragment extends Fragment {
 
-    public static QuranFragment newInstance() {
+//    public static QuranFragment newInstance() {
+//
+//        return new QuranFragment();
+//    }
+    private static QuranFragment m_A = new QuranFragment();
 
-        return new QuranFragment();
+    static QuranFragment getQuranFragment() {
+        return m_A;
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
