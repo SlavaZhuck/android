@@ -25,6 +25,7 @@ import android.location.LocationListener;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -67,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //location
         geocoder = new Geocoder(this, Locale.getDefault());
-        mLatTextView = (TextView) findViewById(R.id.textViewLat);
-        mLonTextView = (TextView) findViewById(R.id.textViewLon);
+
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = mLocationManager.getBestProvider(criteria, false);
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             System.out.println("Provider " + provider + " has been selected.");
             onLocationChanged(location);
         } else {
-            mLatTextView.setText("Location not available");
-            mLonTextView.setText("Location not available");
+       //     mLatTextView.setText("Location not available");
+      //      mLonTextView.setText("Location not available");
         }
 
 
@@ -198,14 +198,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         try {
             addresses =  geocoder.getFromLocation(lat, lon,1);
-            mLatTextView.setText(addresses.get(0).getAddressLine(0));
-            mLonTextView.setText(addresses.get(0).getLocality());
+            //mLatTextView.setText(addresses.get(0).getAddressLine(0));
+           // mLonTextView.setText(addresses.get(0).getLocality());
             mLocation = location;
+            Settings = getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = MainActivity.Settings.edit();
+            editor.putString("lastLocation", addresses.get(0).getLocality()); //складываем элементы массива
+            editor.commit();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override

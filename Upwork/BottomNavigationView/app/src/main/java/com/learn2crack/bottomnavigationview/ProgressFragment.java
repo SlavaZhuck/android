@@ -30,8 +30,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -46,7 +51,10 @@ public class ProgressFragment extends Fragment {
     // List view
     private ListView lv;
     private TextView city;
-    TextView contentView;
+    private TextView nextPrayer;
+    private TextView nextPrayerTime;
+    private TextView elapsedTime;
+    Date datePray;
     String contentText = null;
     WebView webView;
     ProgressTask progressTask;
@@ -66,7 +74,8 @@ public class ProgressFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
-       adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
+
+        adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
         progressTask = (ProgressTask) new ProgressTask().execute();
 
         return view;
@@ -96,11 +105,38 @@ public class ProgressFragment extends Fragment {
             // записываем в аррей лист
             titleList.add(titles);
         }
+        String lastLocation = new String();
+        lastLocation = MainActivity.Settings.getString("lastLocation", null);
         city = (TextView) this.getActivity().findViewById(R.id.city);
-        city.setText(MainActivity.addresses.get(0).getLocality());
+        nextPrayer = (TextView)this.getActivity().findViewById(R.id.nextPrayer);
+        nextPrayerTime = (TextView)this.getActivity().findViewById(R.id.nextPrayTime);
+        elapsedTime = (TextView)this.getActivity().findViewById(R.id.elapsedTime);
 
+        if(lastLocation!=null)
+            city.setText(lastLocation);
+        else
+            city.setText("Unknown");
         lv.setAdapter(adapter);
+        String arr[];
 
+        if(a.length>0){
+            arr = a[0].split(" ", 2);
+            nextPrayer.setText(arr[0]);
+            nextPrayerTime.setText(arr[1]);
+            SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+            Date currentDate = new Date();
+            df.format(currentDate);
+            try {
+                Date dt = df.parse(arr[1]);
+                df.format(dt);
+              //  int diffMs = (int) (currentDate.getTime()-dt.getTime());
+             //   elapsedTime.setText(diffMs);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else{
+            nextPrayer.setText("Unknown");
+        }
     }
 
     @Override
@@ -131,9 +167,17 @@ public class ProgressFragment extends Fragment {
                 Elements prayerName = doc.getElementsByClass("prayer-name");
                 Elements prayerTime= doc.getElementsByClass("prayer-time");
 
-                 prayerNameS = new ArrayList<String>();
-                 prayerNameTimeS = new ArrayList<String>();
-                 prayerTimeS = new ArrayList<String>();
+                Elements date= doc.getElementsByTag("h3");
+                DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+                try {
+                    datePray = format.parse(date.text());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                prayerNameS = new ArrayList<String>();
+                prayerNameTimeS = new ArrayList<String>();
+                prayerTimeS = new ArrayList<String>();
 
                 int i = 0;
                 for(Element titles: prayerName){
@@ -155,9 +199,9 @@ public class ProgressFragment extends Fragment {
 
 
                 // for (Element titles : prayerTime) {
-                    // записываем в аррей лист
-               //     titleList.add(titles.text());
-               // }
+                // записываем в аррей лист
+                //     titleList.add(titles.text());
+                // }
 
 
             } catch (IOException e) {
@@ -179,8 +223,8 @@ public class ProgressFragment extends Fragment {
         protected void onPostExecute(String content) {
 
             contentText=content;
-          //  contentView.setText(content);
-           // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
+            //  contentView.setText(content);
+            // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
             Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT)
                     .show();
             lv.setAdapter(adapter);
