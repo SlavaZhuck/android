@@ -34,6 +34,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
@@ -55,12 +56,15 @@ public class ProgressFragment extends Fragment {
     private TextView nextPrayerTime;
     private TextView elapsedTime;
     Date datePray;
+    Date currentDate;
     String contentText = null;
     WebView webView;
     ProgressTask progressTask;
     ArrayList<String> prayerNameS = new ArrayList<String>();
     ArrayList<String> prayerNameTimeS = new ArrayList<String>();
     ArrayList<String> prayerTimeS = new ArrayList<String>();
+    Calendar calendarPrayTime = Calendar.getInstance();
+    Calendar calendarCurrentTime = Calendar.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,32 +114,46 @@ public class ProgressFragment extends Fragment {
         city = (TextView) this.getActivity().findViewById(R.id.city);
         nextPrayer = (TextView)this.getActivity().findViewById(R.id.nextPrayer);
         nextPrayerTime = (TextView)this.getActivity().findViewById(R.id.nextPrayTime);
-        elapsedTime = (TextView)this.getActivity().findViewById(R.id.elapsedTime);
+        //elapsedTime = (TextView)this.getActivity().findViewById(R.id.elapsedTime);
 
         if(lastLocation!=null)
             city.setText(lastLocation);
         else
             city.setText("Unknown");
         lv.setAdapter(adapter);
-        String arr[];
+        String arrPray[];
+        String arrPrayTime[];
+        String nextPrayHour = new String();
+        String nextPrayminute = new String();
+
+        DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+        currentDate = new Date();
+        format.format(currentDate);
+        calendarCurrentTime.setTime(currentDate);
+
 
         if(a.length>0){
-            arr = a[0].split(" ", 2);
-            nextPrayer.setText(arr[0]);
-            nextPrayerTime.setText(arr[1]);
-            SimpleDateFormat df = new SimpleDateFormat("hh:mm");
-            Date currentDate = new Date();
-            df.format(currentDate);
-            try {
-                Date dt = df.parse(arr[1]);
-                df.format(dt);
-              //  int diffMs = (int) (currentDate.getTime()-dt.getTime());
-             //   elapsedTime.setText(diffMs);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            arrPray = a[0].split(" ", 2);
+            arrPrayTime = arrPray[1].split(":", 2);
+            nextPrayHour = arrPrayTime[0];
+            nextPrayminute = arrPrayTime[1];
+            calendarPrayTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nextPrayHour));
+            calendarPrayTime.set(Calendar.MINUTE, Integer.parseInt(nextPrayminute));
+
+           // DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+            //currentDate = new Date();
+            //format.format(currentDate);
+
+            nextPrayer.setText(arrPray[0]);
+            nextPrayerTime.setText(arrPray[1]);
+           // long seconds = (calendarPrayTime.getTimeInMillis() - calendarCurrentTime.getTimeInMillis()) / 1000;
+            //int diffMs = (int) (calendarPrayTime.getTime()-currentDate.getTime());
+            // elapsedTime.setText(String.valueOf(seconds));
+
         }else{
             nextPrayer.setText("Unknown");
+            nextPrayerTime.setText("Unknown");
+            elapsedTime.setText("Unknown");
         }
     }
 
@@ -159,9 +177,15 @@ public class ProgressFragment extends Fragment {
 
             // класс который захватывает страницу
             Document doc;
+            String url = new String ();
+            String currentYear = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.YEAR));
+            String currentMonth = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.MONTH)+1);
+            String currentDay = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.DAY_OF_MONTH));
+            String currentPlace = "/415"; //for Male city
+            url = "http://namaadhuvaguthu.com/en/prayertimes"+currentPlace+currentYear+currentMonth+currentDay;
             try {
                 // определяем откуда будем воровать данные
-                doc = Jsoup.connect("http://namaadhuvaguthu.com/en").get();
+                doc = Jsoup.connect(url).get();
                 // задаем с какого места, я выбрал заголовке статей/////////////////////////////////////////////////////////////////////////////////////////////////////////
                 titleStr = doc.title();
                 Elements prayerName = doc.getElementsByClass("prayer-name");
@@ -171,6 +195,7 @@ public class ProgressFragment extends Fragment {
                 DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
                 try {
                     datePray = format.parse(date.text());
+                    calendarPrayTime.setTime(datePray);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
