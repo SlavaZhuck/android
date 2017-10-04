@@ -17,6 +17,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class ProgressFragment extends Fragment {
     public ArrayList<String> titleList = new ArrayList<String>();
     // Listview Adapter для вывода данных
     private ArrayAdapter<String> adapter;
+    private SimpleAdapter adapter1;
     // List view
     private ListView lv;
     private TextView city;
@@ -79,7 +81,9 @@ public class ProgressFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
 
-        adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.product_name, titleList);
+        adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, titleList);
+     //   adapter1 = new SimpleAdapter(view.getContext(), R.layout.list_item , new String[]{"Name", "Time"},
+     //           new int[]{R.id.pray_name, R.id.pray_time});
         progressTask = (ProgressTask) new ProgressTask().execute();
 
         return view;
@@ -153,7 +157,7 @@ public class ProgressFragment extends Fragment {
         }else{
             nextPrayer.setText("Unknown");
             nextPrayerTime.setText("Unknown");
-            elapsedTime.setText("Unknown");
+            //elapsedTime.setText("Unknown");
         }
     }
 
@@ -250,8 +254,7 @@ public class ProgressFragment extends Fragment {
             contentText=content;
             //  contentView.setText(content);
             // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
-            Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT)
-                    .show();
+           // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
             lv.setAdapter(adapter);
         }
 
