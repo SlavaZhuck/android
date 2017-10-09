@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
 
         if (savedInstanceState == null) {
-            loadMoreFragment();
+            loadHomeFragment();
         }
 
         //location
