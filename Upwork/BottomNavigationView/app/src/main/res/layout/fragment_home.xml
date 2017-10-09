@@ -25,16 +25,17 @@
             android:id="@+id/nextPrayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:text="nextPrayer"
             android:textColor="@color/colorWhite"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/nextPrayTime"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/nextPrayTime" />
 
         <TextView
             android:id="@+id/nextPrayerText"
@@ -71,13 +72,14 @@
             android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="city"
             android:textColor="@color/colorWhite"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/nextPrayerText"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextPrayerText" />
 
         <TextView
             android:id="@+id/elapsedTime"
@@ -89,10 +91,11 @@
             android:layout_marginTop="8dp"
             android:text="elapsedTime"
             android:textColor="@color/colorWhite"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nextPrayTime"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

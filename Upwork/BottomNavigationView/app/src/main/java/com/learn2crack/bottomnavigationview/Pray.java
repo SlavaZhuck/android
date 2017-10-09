@@ -11,6 +11,10 @@ public class Pray {
     private String mName;
     private Calendar mDate;
 
+    @Override
+    public String toString() {
+        return mName;
+    }
 
     public Pray(String name, Calendar date) {
         mName   = name;

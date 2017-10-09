@@ -11,7 +11,7 @@ import java.util.Date;
 public class PrayFull {
     private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
     private static int mClosestPrayNum;
-    private static int timeToNext;
+    private static long timeToNext;
     private static long currentTimeMils;
     PrayFull(){
     }
@@ -37,26 +37,37 @@ public class PrayFull {
         mClosestPrayNum = closestPrayNum;
     }
 
-    public static int findClosestPray(Calendar currentDate){
-        long currentDateinMills = currentDate.getTimeInMillis();
-        for (int i =0; i< mPrayList.size();i++) {
-            long time = mPrayList.get(i).getDate().getTimeInMillis();
-         //   mPrayList.add(titles);
-        }
+//    public static int findClosestPray(Calendar currentDate){
+//        long currentDateinMills = currentDate.getTimeInMillis();
+//        for (int i =0; i< mPrayList.size();i++) {
+//            long time = mPrayList.get(i).getDate().getTimeInMillis();
+//         //   mPrayList.add(titles);
+//        }
+//
+//        return 0;
+//    }
 
-        return 0;
+    public static long getTimeToNext() {
+        return timeToNext;
+    }
+
+    public static void setTimeToNext(long timeToNext) {
+        PrayFull.timeToNext = timeToNext;
     }
 
     public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList){
         Calendar currCal = ProgressFragment.calendarCurrentTime;
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
         ArrayList<Pray> actualPrays = new ArrayList<Pray>();
-       for (int i =0; i< mPrayList.size();i++) {
+        for (int i =0; i< mPrayList.size();i++) {
             long time = mPrayList.get(i).getDate().getTimeInMillis();
-        //    if(mPrayList.get(i).compareTo(currCal)==1){
-       //         actualPrays.add(mPrayList.get(i));
-        //    }
-            //   mPrayList.add(titles);
+            if(time > currentTimeMils){
+                actualPrays.add(mPrayList.get(i));
+            }
+           //actualPrays.add(titles);
+        }
+        if(mPrayList.size()>0) {
+            timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
         }
 
         return actualPrays;
