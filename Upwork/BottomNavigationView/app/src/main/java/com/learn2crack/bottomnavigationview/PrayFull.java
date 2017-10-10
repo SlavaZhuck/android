@@ -10,10 +10,15 @@ import java.util.Date;
 
 public class PrayFull {
     private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
-    private static int mClosestPrayNum;
+    private static Pray mClosestPray = new Pray();
     private static long timeToNext;
     private static long currentTimeMils;
+    private static int mPrayListSize = 0;
     PrayFull(){
+    }
+
+    public static int getmPrayListSize() {
+        return mPrayListSize;
     }
 
     public ArrayList<Pray> getPrayList() {
@@ -24,17 +29,10 @@ public class PrayFull {
         mPrayList = prayList;
     }
 
-    public int getClosestPrayNum() {
-        return mClosestPrayNum;
-    }
 
-    public void setClosestPrayNum(int closestPrayNum) {
-        mClosestPrayNum = closestPrayNum;
-    }
-
-    PrayFull(ArrayList<Pray> prayList, int closestPrayNum){
+    PrayFull(ArrayList<Pray> prayList){
         mPrayList = prayList;
-        mClosestPrayNum = closestPrayNum;
+
     }
 
 //    public static int findClosestPray(Calendar currentDate){
@@ -47,12 +45,12 @@ public class PrayFull {
 //        return 0;
 //    }
 
-    public static long getTimeToNext() {
-        return timeToNext;
-    }
 
-    public static void setTimeToNext(long timeToNext) {
-        PrayFull.timeToNext = timeToNext;
+    public static long getTimeToNext() {
+        currentTimeMils = Calendar.getInstance().getTimeInMillis();
+
+        return mClosestPray.getDate().getTimeInMillis() - currentTimeMils;
+
     }
 
     public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList){
@@ -69,7 +67,8 @@ public class PrayFull {
         if(mPrayList.size()>0) {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
         }
-
+        mPrayListSize = mPrayList.size();
+        mClosestPray = actualPrays.get(0);
         return actualPrays;
     }
 }

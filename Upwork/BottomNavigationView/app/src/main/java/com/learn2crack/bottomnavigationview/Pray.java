@@ -11,9 +11,13 @@ public class Pray {
     private String mName;
     private Calendar mDate;
 
+    public Pray() {
+
+    }
+
     @Override
     public String toString() {
-        return mName;
+        return mName + " " + mDate.get(Calendar.HOUR_OF_DAY)+ ":" + mDate.get(Calendar.MINUTE);
     }
 
     public Pray(String name, Calendar date) {
