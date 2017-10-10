@@ -222,28 +222,24 @@ public class ProgressFragment extends Fragment {
                 Elements prayerTime= doc.getElementsByClass("prayer-time");
                 Elements prayerNameNext = docNext.getElementsByClass("prayer-name");
                 Elements prayerTimeNext= docNext.getElementsByClass("prayer-time");
-                Elements date= doc.getElementsByTag("h3");
-                Elements dateNext= docNext.getElementsByTag("h3");
-                DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+
+                prayerNameS = new ArrayList<>();
+                prayerNameTimeS = new ArrayList<>();
+                prayerTimeS = new ArrayList<>();
+                prayerNameSNext = new ArrayList<>();
+                prayerNameTimeSNext = new ArrayList<>();
+                prayerTimeSNext = new ArrayList<>();
 
 
-                prayerNameS = new ArrayList<String>();
-                prayerNameTimeS = new ArrayList<String>();
-                prayerTimeS = new ArrayList<String>();
-                prayerNameSNext = new ArrayList<String>();
-                prayerNameTimeSNext = new ArrayList<String>();
-                prayerTimeSNext = new ArrayList<String>();
-
-                int i = 0;
-                for(Element titles: prayerName){
+                for(int i=0;i< prayerName.size();i++){
                     prayerNameS.add(prayerName.get(i).text());
                     prayerTimeS.add(prayerTime.get(i).text());
                     prayerNameTimeS.add(prayerName.get(i).text()+ " " + prayerTime.get(i).text());
                     i++;
                 }
 
-                i = 0;
-                for(Element titles: prayerNameNext){
+
+                for(int i=0;i< prayerNameNext.size(); ){
                     prayerNameSNext.add(prayerNameNext.get(i).text());
                     prayerTimeSNext.add(prayerTimeNext.get(i).text());
                     prayerNameTimeSNext.add(prayerNameNext.get(i).text()+ " " + prayerTimeNext.get(i).text());
@@ -264,7 +260,7 @@ public class ProgressFragment extends Fragment {
                         - tempcalendar.get(Calendar.MINUTE)*1000l*60l - tempcalendar.get(Calendar.SECOND)*1000l - tempcalendar.get(Calendar.MILLISECOND);
                 if (prayerNameTimeS.size() > 0) {
                     prayList.clear();
-                    for (i =0;i<prayerNameTimeS.size();i++) {
+                    for (int i =0;i<prayerNameTimeS.size();i++) {
                         arrPray = prayerNameTimeS.get(i).split(" ", 2);
                         arrPrayName[i] =arrPray[0];
                         arrPrayTime[i] = arrPray[1];
@@ -282,7 +278,7 @@ public class ProgressFragment extends Fragment {
                     }
                 }
                 if (prayerNameTimeSNext.size() > 0) {
-                    for (i =0;i<prayerNameTimeSNext.size();i++) {
+                    for (int i =0;i<prayerNameTimeSNext.size();i++) {
                         arrPray = prayerNameTimeSNext.get(i).split(" ", 2);
                         arrPrayName[i] =arrPray[0];
                         arrPrayTime[i] = arrPray[1];
@@ -305,7 +301,7 @@ public class ProgressFragment extends Fragment {
 
                 if(prayListActual.size()>0) {
                     titleList.clear();
-                    for (i = 0; i < prayListActual.size(); i++) {
+                    for (int i = 0; i < prayListActual.size(); i++) {
                         titleList.add(prayListActual.get(i).getName() + " " + String.format("%02d:%02d", prayListActual.get(i).getDate().get(Calendar.HOUR_OF_DAY),prayListActual.get(i).getDate().get(Calendar.MINUTE)) );
                     }
                 }
@@ -314,7 +310,7 @@ public class ProgressFragment extends Fragment {
                 SharedPreferences.Editor editor = MainActivity.Settings.edit();
                 if(titleList.size()>0) {
                     editor.putInt("prayArraySize", titleList.size());
-                    for (i = 0; i < titleList.size(); i++)
+                    for (int i = 0; i < titleList.size(); i++)
                         editor.putString("prayArray" + i, titleList.get(i).toString()); //складываем элементы массива
                     editor.commit();
                 }
