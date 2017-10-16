@@ -76,7 +76,7 @@ public class ProgressFragment extends Fragment {
     //Calendar calendarCurrentTimeNext = Calendar.getInstance();
     String[] loadedArrayPray;
     String[] loadedArrayPrayNext;
-    String lastLocation;
+    String mLastLocation;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,23 +114,26 @@ public class ProgressFragment extends Fragment {
 
         lv.setAdapter(adapter);
         calendarCurrentTime.setTime(currentDate);
-        lastLocation = new String();
-        lastLocation = MainActivity.Settings.getString("lastLocation", null);
-        if(lastLocation!=null)
-            city.setText(lastLocation);
+        mLastLocation = new String();
+        mLastLocation = MainActivity.Settings.getString("lastLocation", null);
+        if(mLastLocation!=null)
+            city.setText(mLastLocation);
         else
             city.setText("Unknown");
 
         if(prayList.size()>0) {
             nextPrayer.setText(prayList.get(0).getName());
             nextPrayerTime.setText(prayList.get(0).getDate().get(Calendar.HOUR_OF_DAY)+":"+ prayList.get(0).getDate().get(Calendar.MINUTE));
-            if(prayFullOb.getmPrayListSize()>0) {
-                long seconds = (long) (prayFullOb.getTimeToNext() / 1000) % 60;
-                long minutes = (long) ((prayFullOb.getTimeToNext() / (1000 * 60)) % 60);
-                long hours = (long) ((prayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
-                String formatted = String.format("H", hours);
-                elapsedTime.setText("(- " + String.format("%02d:%02d", hours, minutes) + ")");
-            }
+//            if(prayFullOb.getmPrayListSize()>0) {
+//                long seconds = (long) (prayFullOb.getTimeToNext() / 1000) % 60;
+//                long minutes = (long) ((prayFullOb.getTimeToNext() / (1000 * 60)) % 60);
+//                long hours = (long) ((prayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
+//                String formatted = String.format("H", hours);
+//                elapsedTime.setText("(- " + String.format("%02d:%02d", hours, minutes) + ")");
+//            }
+            MainActivity.Settings=this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
+            String elapsedTimeS= MainActivity.Settings.getString("elapsedTime",null); //читаем размер массива
+            elapsedTime.setText(elapsedTimeS);
         } else {
             nextPrayer.setText("Unknown");
             nextPrayerTime.setText("Unknown");
@@ -235,19 +238,19 @@ public class ProgressFragment extends Fragment {
                     prayerNameS.add(prayerName.get(i).text());
                     prayerTimeS.add(prayerTime.get(i).text());
                     prayerNameTimeS.add(prayerName.get(i).text()+ " " + prayerTime.get(i).text());
-                    i++;
+
                 }
 
 
-                for(int i=0;i< prayerNameNext.size(); ){
+                for(int i=0;i< prayerNameNext.size(); i++){
                     prayerNameSNext.add(prayerNameNext.get(i).text());
                     prayerTimeSNext.add(prayerTimeNext.get(i).text());
                     prayerNameTimeSNext.add(prayerNameNext.get(i).text()+ " " + prayerTimeNext.get(i).text());
-                    i++;
+
                 }
 
-                lastLocation = new String();
-                lastLocation = MainActivity.Settings.getString("lastLocation", null);
+                mLastLocation = new String();
+                mLastLocation = MainActivity.Settings.getString("lastLocation", null);
 
                 String arrPray[] = new String[prayerName.size()];
                 String arrPrayName[] = new String[prayerName.size()];
@@ -314,6 +317,19 @@ public class ProgressFragment extends Fragment {
                         editor.putString("prayArray" + i, titleList.get(i).toString()); //складываем элементы массива
                     editor.commit();
                 }
+
+                if(prayFullOb.getmPrayListSize()>0) {
+                    long seconds = (long) (prayFullOb.getTimeToNext() / 1000) % 60;
+                    long minutes = (long) ((prayFullOb.getTimeToNext() / (1000 * 60)) % 60);
+                    long hours = (long) ((prayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
+                    String formatted = String.format("H", hours);
+                    String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
+                    editor.putString("elapsedTime" , elapsedTimeS);
+                    editor.commit();
+                }
+
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();
