@@ -17,12 +17,12 @@ public class Pray {
 
     @Override
     public String toString() {
-        return mName + " " + mDate.get(Calendar.HOUR_OF_DAY)+ ":" + mDate.get(Calendar.MINUTE);
+        return mName + " " + mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
     }
 
     public Pray(String name, Calendar date) {
-        mName   = name;
-        mDate   = date;
+        mName = name;
+        mDate = date;
 
     }
 

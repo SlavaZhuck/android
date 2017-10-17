@@ -56,27 +56,22 @@ public class ProgressFragment extends Fragment {
     private TextView nextPrayer;
     private TextView nextPrayerTime;
     private TextView elapsedTime;
-    //Date datePray;
-    //Date datePrayNext;
-    Date currentDate;
-    //Date currentDateNext;
-    String contentText = null;
-    ProgressTask progressTask;
-    ArrayList<String> prayerNameS = new ArrayList<String>();
-    ArrayList<String> prayerNameTimeS = new ArrayList<String>();
-    ArrayList<String> prayerTimeS = new ArrayList<String>();
-    ArrayList<String> prayerNameSNext = new ArrayList<String>();
-    ArrayList<String> prayerNameTimeSNext = new ArrayList<String>();
-    ArrayList<String> prayerTimeSNext = new ArrayList<String>();
-    ArrayList<Calendar> calendarPrayTime = new ArrayList<Calendar>();
-    ArrayList<Pray> prayList= new ArrayList<Pray>();
-    ArrayList<Pray> prayListActual= new ArrayList<Pray>();
-    PrayFull prayFullOb= new PrayFull(prayList);
-    static Calendar calendarCurrentTime = Calendar.getInstance();
-    //Calendar calendarCurrentTimeNext = Calendar.getInstance();
-    String[] loadedArrayPray;
-    String[] loadedArrayPrayNext;
-    String mLastLocation;
+    private ProgressTask progressTask;
+    //private String mContentText = null;
+    private static Calendar mCalendarCurrentTime = Calendar.getInstance();
+    private Date mCurrentDate;
+    private ArrayList<String> mPrayerNameS = new ArrayList<String>();
+    private ArrayList<String> mPrayerNameTimeS = new ArrayList<String>();
+    private ArrayList<String> mPrayerTimeS = new ArrayList<String>();
+    private ArrayList<String> mPrayerNameSNext = new ArrayList<String>();
+    private ArrayList<String> prayerNameTimeSNext = new ArrayList<String>();
+    private ArrayList<String> prayerTimeSNext = new ArrayList<String>();
+    private ArrayList<Pray> mPrayList = new ArrayList<Pray>();
+    private ArrayList<Pray> mPrayListActual = new ArrayList<Pray>();
+    private PrayFull mPrayFullOb = new PrayFull(mPrayList);
+    private String[] mLoadedArrayPray;
+    private String mLastLocation;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,33 +101,33 @@ public class ProgressFragment extends Fragment {
         super.onResume();
         restoreData();
 
-
         city = (TextView) this.getActivity().findViewById(R.id.city);
-        nextPrayer = (TextView)this.getActivity().findViewById(R.id.nextPrayer);
-        nextPrayerTime = (TextView)this.getActivity().findViewById(R.id.nextPrayTime);
-        elapsedTime = (TextView)this.getActivity().findViewById(R.id.elapsedTime);
+        nextPrayer = (TextView) this.getActivity().findViewById(R.id.nextPrayer);
+        nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
+        elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
         lv.setAdapter(adapter);
-        calendarCurrentTime.setTime(currentDate);
+        mCalendarCurrentTime.setTime(mCurrentDate);
+
         mLastLocation = new String();
         mLastLocation = MainActivity.Settings.getString("lastLocation", null);
-        if(mLastLocation!=null)
+        if (mLastLocation != null)
             city.setText(mLastLocation);
         else
             city.setText("Unknown");
 
-        if(prayList.size()>0) {
-            nextPrayer.setText(prayList.get(0).getName());
-            nextPrayerTime.setText(prayList.get(0).getDate().get(Calendar.HOUR_OF_DAY)+":"+ prayList.get(0).getDate().get(Calendar.MINUTE));
-//            if(prayFullOb.getmPrayListSize()>0) {
-//                long seconds = (long) (prayFullOb.getTimeToNext() / 1000) % 60;
-//                long minutes = (long) ((prayFullOb.getTimeToNext() / (1000 * 60)) % 60);
-//                long hours = (long) ((prayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
+        if (mPrayList.size() > 0) {
+            nextPrayer.setText(mPrayList.get(0).getName());
+            nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
+//            if(mPrayFullOb.getmPrayListSize()>0) {
+//                long seconds = (long) (mPrayFullOb.getTimeToNext() / 1000) % 60;
+//                long minutes = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60)) % 60);
+//                long hours = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
 //                String formatted = String.format("H", hours);
 //                elapsedTime.setText("(- " + String.format("%02d:%02d", hours, minutes) + ")");
 //            }
-            MainActivity.Settings=this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
-            String elapsedTimeS= MainActivity.Settings.getString("elapsedTime",null); //читаем размер массива
+            MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
+            String elapsedTimeS = MainActivity.Settings.getString("elapsedTime", null); //читаем размер массива
             elapsedTime.setText(elapsedTimeS);
         } else {
             nextPrayer.setText("Unknown");
@@ -141,18 +136,17 @@ public class ProgressFragment extends Fragment {
         }
     }
 
-    public void restoreData(){
-        MainActivity.Settings=this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
-        int size= MainActivity.Settings.getInt("prayArraySize", 0); //читаем размер массива
+    public void restoreData() {
+        MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
+        int size = MainActivity.Settings.getInt("prayArraySize", 0); //читаем размер массива
 
-        loadedArrayPray=new String[size]; //аллоцируем массив
-         for(int i=0; i < loadedArrayPray.length; i++)
-            loadedArrayPray[i]=MainActivity.Settings.getString("prayArray"+i, null); //заполняем элементы массив
+        mLoadedArrayPray = new String[size]; //аллоцируем массив
+        for (int i = 0; i < mLoadedArrayPray.length; i++)
+            mLoadedArrayPray[i] = MainActivity.Settings.getString("prayArray" + i, null); //заполняем элементы массив
 
         DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
-        currentDate = new Date();
-        format.format(currentDate);
-
+        mCurrentDate = new Date();
+        format.format(mCurrentDate);
 
 
         String arrPray[] = new String[size];
@@ -162,32 +156,32 @@ public class ProgressFragment extends Fragment {
         long arrPrayTimeM[] = new long[size];
         Calendar tempcalendar = Calendar.getInstance();
         long currentDayTImeStamp = Calendar.getInstance().getTimeInMillis();
-        currentDayTImeStamp = currentDayTImeStamp - tempcalendar.get(Calendar.HOUR_OF_DAY)*1000l*60l*60l
-                                - tempcalendar.get(Calendar.MINUTE)*1000l*60l - tempcalendar.get(Calendar.SECOND)*1000l - tempcalendar.get(Calendar.MILLISECOND);
-        if (loadedArrayPray.length > 0) {
-            prayList.clear();
-            for (int i =0;i<loadedArrayPray.length;i++) {
-                arrPray = loadedArrayPray[i].split(" ", 2);
-                arrPrayName[i] =arrPray[0];
+        currentDayTImeStamp = currentDayTImeStamp - tempcalendar.get(Calendar.HOUR_OF_DAY) * 1000l * 60l * 60l
+                - tempcalendar.get(Calendar.MINUTE) * 1000l * 60l - tempcalendar.get(Calendar.SECOND) * 1000l - tempcalendar.get(Calendar.MILLISECOND);
+        if (mLoadedArrayPray.length > 0) {
+            mPrayList.clear();
+            for (int i = 0; i < mLoadedArrayPray.length; i++) {
+                arrPray = mLoadedArrayPray[i].split(" ", 2);
+                arrPrayName[i] = arrPray[0];
                 arrPrayTime[i] = arrPray[1];
-                arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0,2));
-                arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3,5));
+                arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0, 2));
+                arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3, 5));
                 tempcalendar = Calendar.getInstance();
-                tempcalendar.set(   Calendar.getInstance().get(Calendar.YEAR),
-                                     Calendar.getInstance().get(Calendar.MONTH),
-                                    Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-                                    (int)arrPrayTimeH[i],
-                                    (int)arrPrayTimeM[i],
-                                    0 );
-                tempcalendar.setTimeInMillis(currentDayTImeStamp+arrPrayTimeH[i]*1000l*60l*60l + arrPrayTimeM[i]*1000l*60l );
-                prayList.add(new Pray(arrPrayName[i], tempcalendar));
+                tempcalendar.set(Calendar.getInstance().get(Calendar.YEAR),
+                        Calendar.getInstance().get(Calendar.MONTH),
+                        Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                        (int) arrPrayTimeH[i],
+                        (int) arrPrayTimeM[i],
+                        0);
+                tempcalendar.setTimeInMillis(currentDayTImeStamp + arrPrayTimeH[i] * 1000l * 60l * 60l + arrPrayTimeM[i] * 1000l * 60l);
+                mPrayList.add(new Pray(arrPrayName[i], tempcalendar));
             }
         }
 
-        if(prayList.size()>0) {
+        if (mPrayList.size() > 0) {
             titleList.clear();
-            for (int i = 0; i < prayList.size(); i++) {
-                titleList.add(prayList.get(i).getName() + " " + String.format("%02d:%02d", prayList.get(i).getDate().get(Calendar.HOUR_OF_DAY),prayList.get(i).getDate().get(Calendar.MINUTE)) );
+            for (int i = 0; i < mPrayList.size(); i++) {
+                titleList.add(mPrayList.get(i).getName() + " " + String.format("%02d:%02d", mPrayList.get(i).getDate().get(Calendar.HOUR_OF_DAY), mPrayList.get(i).getDate().get(Calendar.MINUTE)));
             }
         }
     }
@@ -206,15 +200,15 @@ public class ProgressFragment extends Fragment {
 
             // класс который захватывает страницу
             Document doc, docNext;
-            String url = new String ();
-            String urlNext = new String ();
-            String currentYear = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.YEAR));
-            String currentMonth = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.MONTH)+1);
-            String currentDay = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.DAY_OF_MONTH));
-            String nextDay = "/"+String.valueOf(calendarCurrentTime.getInstance().get(calendarCurrentTime.DAY_OF_MONTH)+1);
+            String url = new String();
+            String urlNext = new String();
+            String currentYear = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.YEAR));
+            String currentMonth = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.MONTH) + 1);
+            String currentDay = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH));
+            String nextDay = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH) + 1);
             String currentPlace = "/415"; //for Male city
-            url = "http://namaadhuvaguthu.com/en/prayertimes"+currentPlace+currentYear+currentMonth+currentDay;
-            urlNext = "http://namaadhuvaguthu.com/en/prayertimes"+currentPlace+currentYear+currentMonth+nextDay;
+            url = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + currentDay;
+            urlNext = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + nextDay;
             try {
                 // определяем откуда будем воровать данные
                 doc = Jsoup.connect(url).get();
@@ -222,30 +216,30 @@ public class ProgressFragment extends Fragment {
                 // задаем с какого места, я выбрал заголовке статей/////////////////////////////////////////////////////////////////////////////////////////////////////////
                 titleStr = doc.title();
                 Elements prayerName = doc.getElementsByClass("prayer-name");
-                Elements prayerTime= doc.getElementsByClass("prayer-time");
+                Elements prayerTime = doc.getElementsByClass("prayer-time");
                 Elements prayerNameNext = docNext.getElementsByClass("prayer-name");
-                Elements prayerTimeNext= docNext.getElementsByClass("prayer-time");
+                Elements prayerTimeNext = docNext.getElementsByClass("prayer-time");
 
-                prayerNameS = new ArrayList<>();
-                prayerNameTimeS = new ArrayList<>();
-                prayerTimeS = new ArrayList<>();
-                prayerNameSNext = new ArrayList<>();
+                mPrayerNameS = new ArrayList<>();
+                mPrayerNameTimeS = new ArrayList<>();
+                mPrayerTimeS = new ArrayList<>();
+                mPrayerNameSNext = new ArrayList<>();
                 prayerNameTimeSNext = new ArrayList<>();
                 prayerTimeSNext = new ArrayList<>();
 
 
-                for(int i=0;i< prayerName.size();i++){
-                    prayerNameS.add(prayerName.get(i).text());
-                    prayerTimeS.add(prayerTime.get(i).text());
-                    prayerNameTimeS.add(prayerName.get(i).text()+ " " + prayerTime.get(i).text());
+                for (int i = 0; i < prayerName.size(); i++) {
+                    mPrayerNameS.add(prayerName.get(i).text());
+                    mPrayerTimeS.add(prayerTime.get(i).text());
+                    mPrayerNameTimeS.add(prayerName.get(i).text() + " " + prayerTime.get(i).text());
 
                 }
 
 
-                for(int i=0;i< prayerNameNext.size(); i++){
-                    prayerNameSNext.add(prayerNameNext.get(i).text());
+                for (int i = 0; i < prayerNameNext.size(); i++) {
+                    mPrayerNameSNext.add(prayerNameNext.get(i).text());
                     prayerTimeSNext.add(prayerTimeNext.get(i).text());
-                    prayerNameTimeSNext.add(prayerNameNext.get(i).text()+ " " + prayerTimeNext.get(i).text());
+                    prayerNameTimeSNext.add(prayerNameNext.get(i).text() + " " + prayerTimeNext.get(i).text());
 
                 }
 
@@ -259,76 +253,74 @@ public class ProgressFragment extends Fragment {
                 long arrPrayTimeM[] = new long[prayerName.size()];
                 Calendar tempcalendar = Calendar.getInstance();
                 long currentDayTImeStamp = Calendar.getInstance().getTimeInMillis();
-                currentDayTImeStamp = currentDayTImeStamp - tempcalendar.get(Calendar.HOUR_OF_DAY)*1000l*60l*60l
-                        - tempcalendar.get(Calendar.MINUTE)*1000l*60l - tempcalendar.get(Calendar.SECOND)*1000l - tempcalendar.get(Calendar.MILLISECOND);
-                if (prayerNameTimeS.size() > 0) {
-                    prayList.clear();
-                    for (int i =0;i<prayerNameTimeS.size();i++) {
-                        arrPray = prayerNameTimeS.get(i).split(" ", 2);
-                        arrPrayName[i] =arrPray[0];
+                currentDayTImeStamp = currentDayTImeStamp - tempcalendar.get(Calendar.HOUR_OF_DAY) * 1000l * 60l * 60l
+                        - tempcalendar.get(Calendar.MINUTE) * 1000l * 60l - tempcalendar.get(Calendar.SECOND) * 1000l - tempcalendar.get(Calendar.MILLISECOND);
+                if (mPrayerNameTimeS.size() > 0) {
+                    mPrayList.clear();
+                    for (int i = 0; i < mPrayerNameTimeS.size(); i++) {
+                        arrPray = mPrayerNameTimeS.get(i).split(" ", 2);
+                        arrPrayName[i] = arrPray[0];
                         arrPrayTime[i] = arrPray[1];
-                        arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0,2));
-                        arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3,5));
+                        arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0, 2));
+                        arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3, 5));
                         tempcalendar = Calendar.getInstance();
-                        tempcalendar.set(   Calendar.getInstance().get(Calendar.YEAR),
+                        tempcalendar.set(Calendar.getInstance().get(Calendar.YEAR),
                                 Calendar.getInstance().get(Calendar.MONTH),
                                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-                                (int)arrPrayTimeH[i],
-                                (int)arrPrayTimeM[i],
-                                0 );
-                        tempcalendar.setTimeInMillis(currentDayTImeStamp+arrPrayTimeH[i]*1000l*60l*60l + arrPrayTimeM[i]*1000l*60l );
-                        prayList.add(new Pray(arrPrayName[i], tempcalendar));
+                                (int) arrPrayTimeH[i],
+                                (int) arrPrayTimeM[i],
+                                0);
+                        tempcalendar.setTimeInMillis(currentDayTImeStamp + arrPrayTimeH[i] * 1000l * 60l * 60l + arrPrayTimeM[i] * 1000l * 60l);
+                        mPrayList.add(new Pray(arrPrayName[i], tempcalendar));
                     }
                 }
                 if (prayerNameTimeSNext.size() > 0) {
-                    for (int i =0;i<prayerNameTimeSNext.size();i++) {
+                    for (int i = 0; i < prayerNameTimeSNext.size(); i++) {
                         arrPray = prayerNameTimeSNext.get(i).split(" ", 2);
-                        arrPrayName[i] =arrPray[0];
+                        arrPrayName[i] = arrPray[0];
                         arrPrayTime[i] = arrPray[1];
-                        arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0,2));
-                        arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3,5));
+                        arrPrayTimeH[i] = Integer.parseInt(arrPrayTime[i].substring(0, 2));
+                        arrPrayTimeM[i] = Integer.parseInt(arrPrayTime[i].substring(3, 5));
                         tempcalendar = Calendar.getInstance();
-                        tempcalendar.set(   Calendar.getInstance().get(Calendar.YEAR),
+                        tempcalendar.set(Calendar.getInstance().get(Calendar.YEAR),
                                 Calendar.getInstance().get(Calendar.MONTH),
-                                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)+1,
-                                (int)arrPrayTimeH[i],
-                                (int)arrPrayTimeM[i],
-                                0 );
-                        tempcalendar.setTimeInMillis(currentDayTImeStamp+arrPrayTimeH[i]*1000l*60l*60l + arrPrayTimeM[i]*1000l*60l + 86400000l );
-                        prayList.add(new Pray(arrPrayName[i], tempcalendar));
+                                Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + 1,
+                                (int) arrPrayTimeH[i],
+                                (int) arrPrayTimeM[i],
+                                0);
+                        tempcalendar.setTimeInMillis(currentDayTImeStamp + arrPrayTimeH[i] * 1000l * 60l * 60l + arrPrayTimeM[i] * 1000l * 60l + 86400000l);
+                        mPrayList.add(new Pray(arrPrayName[i], tempcalendar));
                     }
                 }
 
-                prayFullOb.setPrayList(prayList);
-                prayListActual = prayFullOb.getActualPrays(prayList);
+                mPrayFullOb.setPrayList(mPrayList);
+                mPrayListActual = mPrayFullOb.getActualPrays(mPrayList);
 
-                if(prayListActual.size()>0) {
+                if (mPrayListActual.size() > 0) {
                     titleList.clear();
-                    for (int i = 0; i < prayListActual.size(); i++) {
-                        titleList.add(prayListActual.get(i).getName() + " " + String.format("%02d:%02d", prayListActual.get(i).getDate().get(Calendar.HOUR_OF_DAY),prayListActual.get(i).getDate().get(Calendar.MINUTE)) );
+                    for (int i = 0; i < mPrayListActual.size(); i++) {
+                        titleList.add(mPrayListActual.get(i).getName() + " " + String.format("%02d:%02d", mPrayListActual.get(i).getDate().get(Calendar.HOUR_OF_DAY), mPrayListActual.get(i).getDate().get(Calendar.MINUTE)));
                     }
                 }
 
                 MainActivity.Settings = getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = MainActivity.Settings.edit();
-                if(titleList.size()>0) {
+                if (titleList.size() > 0) {
                     editor.putInt("prayArraySize", titleList.size());
                     for (int i = 0; i < titleList.size(); i++)
                         editor.putString("prayArray" + i, titleList.get(i).toString()); //складываем элементы массива
                     editor.commit();
                 }
 
-                if(prayFullOb.getmPrayListSize()>0) {
-                    long seconds = (long) (prayFullOb.getTimeToNext() / 1000) % 60;
-                    long minutes = (long) ((prayFullOb.getTimeToNext() / (1000 * 60)) % 60);
-                    long hours = (long) ((prayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
+                if (mPrayFullOb.getmPrayListSize() > 0) {
+                    long seconds = (long) (mPrayFullOb.getTimeToNext() / 1000) % 60;
+                    long minutes = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60)) % 60);
+                    long hours = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
                     String formatted = String.format("H", hours);
                     String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
-                    editor.putString("elapsedTime" , elapsedTimeS);
+                    editor.putString("elapsedTime", elapsedTimeS);
                     editor.commit();
                 }
-
-
 
 
             } catch (IOException e) {
@@ -340,30 +332,29 @@ public class ProgressFragment extends Fragment {
         @Override
         protected void onPostExecute(String content) {
 
-            contentText=content;
+            // mContentText=content;
             //  contentView.setText(content);
             // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
-           // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
             lv.setAdapter(adapter);
         }
 
         private String getContent(String path) throws IOException {
-            BufferedReader reader=null;
+            BufferedReader reader = null;
             try {
-                URL url=new URL(path);
-                HttpsURLConnection c=(HttpsURLConnection)url.openConnection();
+                URL url = new URL(path);
+                HttpsURLConnection c = (HttpsURLConnection) url.openConnection();
                 c.setRequestMethod("GET");
                 c.setReadTimeout(10000);
                 c.connect();
-                reader= new BufferedReader(new InputStreamReader(c.getInputStream()));
-                StringBuilder buf=new StringBuilder();
-                String line=null;
-                while ((line=reader.readLine()) != null) {
+                reader = new BufferedReader(new InputStreamReader(c.getInputStream()));
+                StringBuilder buf = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
                     buf.append(line + "\n");
                 }
-                return(buf.toString());
-            }
-            finally {
+                return (buf.toString());
+            } finally {
                 if (reader != null) {
                     reader.close();
                 }

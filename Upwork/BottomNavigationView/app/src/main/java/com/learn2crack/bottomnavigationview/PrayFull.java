@@ -14,7 +14,8 @@ public class PrayFull {
     private static long timeToNext;
     private static long currentTimeMils;
     private static int mPrayListSize = 0;
-    PrayFull(){
+
+    PrayFull() {
     }
 
     public static int getmPrayListSize() {
@@ -30,7 +31,7 @@ public class PrayFull {
     }
 
 
-    PrayFull(ArrayList<Pray> prayList){
+    PrayFull(ArrayList<Pray> prayList) {
         mPrayList = prayList;
 
     }
@@ -53,18 +54,18 @@ public class PrayFull {
 
     }
 
-    public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList){
-        Calendar currCal = ProgressFragment.calendarCurrentTime;
+    public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList) {
+        // Calendar currCal = ProgressFragment.mCalendarCurrentTime;
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
         ArrayList<Pray> actualPrays = new ArrayList<Pray>();
-        for (int i =0; i< mPrayList.size();i++) {
+        for (int i = 0; i < mPrayList.size(); i++) {
             long time = mPrayList.get(i).getDate().getTimeInMillis();
-            if(time > currentTimeMils){
+            if (time > currentTimeMils) {
                 actualPrays.add(mPrayList.get(i));
             }
-           //actualPrays.add(titles);
+            //actualPrays.add(titles);
         }
-        if(mPrayList.size()>0) {
+        if (mPrayList.size() > 0) {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
         }
         mPrayListSize = mPrayList.size();

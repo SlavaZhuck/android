@@ -36,20 +36,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private BottomNavigationView mBottomNavigationView;
     private Geocoder geocoder;
     private LocationManager mLocationManager;
-    private TextView mLatTextView;
-    private TextView mLonTextView;
     private String provider;
-    private Location mLocation;
-    public static List<Address> addresses;
+     public static List<Address> addresses;
     // это будет именем файла настроек
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
     public static SharedPreferences Settings;
-      private static final int   MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 1;
+    private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 1;
+
     // private Toolbar mAppToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestPermission ();
+        requestPermission();
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -59,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setupBottomNavigation();
         // ActionBar actionBar = getActionBar();
         String dateString = DateFormat.format("EEEE d MMMM", new Date()).toString();
-        String subDateString = DateFormat.format("yyyy-MM-dd", new Date()).toString();
         setSupportActionBar(toolbar);
         toolbar.setTitle(dateString);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorWhite));
@@ -91,10 +88,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             System.out.println("Provider " + provider + " has been selected.");
             onLocationChanged(location);
         } else {
-       //     mLatTextView.setText("Location not available");
-      //      mLonTextView.setText("Location not available");
+            //     mLatTextView.setText("Location not available");
+            //      mLonTextView.setText("Location not available");
         }
-
 
 
     }
@@ -200,10 +196,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         double lon = (double) (location.getLongitude());
 
         try {
-            addresses =  geocoder.getFromLocation(lat, lon,1);
+            addresses = geocoder.getFromLocation(lat, lon, 1);
             //mLatTextView.setText(addresses.get(0).getAddressLine(0));
-           // mLonTextView.setText(addresses.get(0).getLocality());
-            mLocation = location;
+            // mLonTextView.setText(addresses.get(0).getLocality());
             Settings = getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = MainActivity.Settings.edit();
             editor.putString("lastLocation", addresses.get(0).getLocality()); //складываем элементы массива
@@ -233,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void requestPermission (){
+    public void requestPermission() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -261,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
