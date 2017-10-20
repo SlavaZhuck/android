@@ -71,11 +71,12 @@ public class ProgressFragment extends Fragment {
     private PrayFull mPrayFullOb = new PrayFull(mPrayList);
     private String[] mLoadedArrayPray;
     private String mLastLocation;
-
+    PrayAdapter prayAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
 
     }
 
@@ -85,6 +86,8 @@ public class ProgressFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, titleList);
+        prayAdapter = new PrayAdapter(this., mPrayListActual);
+
         progressTask = (ProgressTask) new ProgressTask().execute();
 
         return view;
@@ -106,7 +109,8 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-        lv.setAdapter(adapter);
+        //lv.setAdapter(adapter);
+        lv.setAdapter(prayAdapter);
         mCalendarCurrentTime.setTime(mCurrentDate);
 
         mLastLocation = new String();
@@ -336,7 +340,8 @@ public class ProgressFragment extends Fragment {
             //  contentView.setText(content);
             // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
             // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
-            lv.setAdapter(adapter);
+           // lv.setAdapter(adapter);
+            lv.setAdapter(prayAdapter);
         }
 
         private String getContent(String path) throws IOException {
