@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-<TextView
+    <TextView
         android:id="@+id/questionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-         />
+        android:onClick="onQuestionClick"
+        android:padding="24dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -35,11 +35,26 @@
             android:text="@string/false_button" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/next_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onNextClick"
-        android:text="@string/next_button" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/prev_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onPrevClick"
+            android:src="@drawable/ic_action_back"/>
+
+        <ImageButton
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onNextClick"
+            android:src="@drawable/ic_action_next"/>
+    </LinearLayout>
 
 </LinearLayout>
