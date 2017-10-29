@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class PrayAdapter extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // используем созданные, но не используемые view
@@ -56,9 +58,9 @@ public class PrayAdapter extends BaseAdapter {
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и картинка
         ((TextView) view.findViewById(R.id.pray_name)).setText(p.getName());
-        ((TextView) view.findViewById(R.id.pray_time)).setText(p.toString());
+        ((TextView) view.findViewById(R.id.pray_time)).setText(p.getTime());
 
-       return view;
+        return view;
     }
 
     Pray getProduct(int position) {

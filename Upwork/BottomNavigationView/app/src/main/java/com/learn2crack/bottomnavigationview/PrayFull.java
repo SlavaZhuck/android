@@ -47,10 +47,15 @@ public class PrayFull {
 //    }
 
 
-    public static long getTimeToNext() {
+    public static String getTimeToNext() {
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
+        long seconds = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / 1000) % 60;
+        long minutes = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60)) % 60;
+        long hours = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils)/ (1000 * 60 * 60)) % 24;
+        String formatted = String.format("H", hours);
+        String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
 
-        return mClosestPray.getDate().getTimeInMillis() - currentTimeMils;
+        return elapsedTimeS;
 
     }
 
