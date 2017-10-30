@@ -47,7 +47,7 @@ public class ProgressFragment extends Fragment {
     public Elements title;
     public String mTitleStr;
     // то в чем будем хранить данные пока не передадим адаптеру
-    public ArrayList<String> mTitleList = new ArrayList<String>();
+    public ArrayList<String> mTitleList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
     private ListView lv;
     private TextView city;
@@ -58,17 +58,17 @@ public class ProgressFragment extends Fragment {
     private PrayAdapter prayAdapter;
     private static Calendar mCalendarCurrentTime = Calendar.getInstance();
     private Date mCurrentDate;
-    private ArrayList<String> mPrayerNameS = new ArrayList<String>();
-    private ArrayList<String> mPrayerNameTimeS = new ArrayList<String>();
-    private ArrayList<String> mPrayerNameSNext = new ArrayList<String>();
-    private ArrayList<String> mPrayerNameTimeSNext = new ArrayList<String>();
-    private ArrayList<Pray> mPrayList = new ArrayList<Pray>();
-    private ArrayList<Pray> mPrayListActual = new ArrayList<Pray>();
+    private ArrayList<String> mPrayerNameS = new ArrayList<>();
+    private ArrayList<String> mPrayerNameTimeS = new ArrayList<>();
+    private ArrayList<String> mPrayerNameSNext = new ArrayList<>();
+    private ArrayList<String> mPrayerNameTimeSNext = new ArrayList<>();
+    private ArrayList<Pray> mPrayList = new ArrayList<>();
+    private ArrayList<Pray> mPrayListActual = new ArrayList<>();
     private String[] mLoadedArrayPray;
     private String mLastLocation;
-    private ArrayList<Pray> mPraylistUrl = new ArrayList<Pray>();
-    private ArrayList<Pray> mPraylistUrlNext = new ArrayList<Pray>();
-    private ArrayList<Pray> mPraylistUrlFull = new ArrayList<Pray>();
+    private ArrayList<Pray> mPraylistUrl = new ArrayList<>();
+    private ArrayList<Pray> mPraylistUrlNext = new ArrayList<>();
+    private ArrayList<Pray> mPraylistUrlFull = new ArrayList<>();
     private PrayFull mPrayFullOb = new PrayFull(mPraylistUrlFull);
 
 
@@ -85,9 +85,9 @@ public class ProgressFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
-        adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, mTitleList);
-   //     mPrayListActual.add(new Pray("aa",mCalendarCurrentTime));
-       // prayAdapter = new PrayAdapter(view.getContext(), mPrayListActual);
+        //adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, mTitleList);
+        mPrayListActual.add(new Pray("aa",mCalendarCurrentTime));
+        prayAdapter = new PrayAdapter(view.getContext(), mPrayList);
 
         progressTask = (ProgressTask) new ProgressTask().execute();
 
@@ -110,10 +110,9 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-        lv.setAdapter(adapter);
+       // lv.setAdapter(adapter);
   //      mPrayListActual.add(new Pray("aa",mCalendarCurrentTime));
  //       prayAdapter = new PrayAdapter(this.getActivity().getBaseContext(), mPrayListActual);
-        //lv.setAdapter(prayAdapter);
         mCalendarCurrentTime.setTime(mCurrentDate);
 
         mLastLocation = new String();
@@ -122,6 +121,7 @@ public class ProgressFragment extends Fragment {
             city.setText(mLastLocation);
         else
             city.setText("Unknown");
+        lv.setAdapter(prayAdapter);
 
         if (mPrayList.size() > 0) {
             nextPrayer.setText(mPrayList.get(0).getName());
@@ -136,6 +136,7 @@ public class ProgressFragment extends Fragment {
             MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
             String elapsedTimeS = MainActivity.Settings.getString("elapsedTime", null); //читаем размер массива
             elapsedTime.setText(elapsedTimeS);
+
         } else {
             nextPrayer.setText("Unknown");
             nextPrayerTime.setText("Unknown");
@@ -159,7 +160,7 @@ public class ProgressFragment extends Fragment {
         format.format(mCurrentDate);
 
 
-        String arrPray[] = new String[size];
+        String arrPray[] ;
         String arrPrayName[] = new String[size];
         String arrPrayTime[] = new String[size];
         long arrPrayTimeH[] = new long[size];
@@ -210,8 +211,8 @@ public class ProgressFragment extends Fragment {
 
             // класс который захватывает страницу
             Document doc, docNext;
-            String url = new String();
-            String urlNext = new String();
+            String url ;
+            String urlNext ;
             String currentYear = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.YEAR));
             String currentMonth = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.MONTH) + 1);
             String currentDay = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH));
@@ -230,14 +231,13 @@ public class ProgressFragment extends Fragment {
                 Elements prayerNameNext = docNext.getElementsByClass("prayer-name");
                 Elements prayerTimeNext = docNext.getElementsByClass("prayer-time");
 
-                mPraylistUrl = new ArrayList<Pray>();
-                mPraylistUrlNext = new ArrayList<Pray>();
-                mPraylistUrlFull = new ArrayList<Pray>();
+                mPraylistUrl = new ArrayList<>();
+                mPraylistUrlFull = new ArrayList<>();
 
-                mPrayerNameS = new ArrayList<String>();
-                mPrayerNameTimeS = new ArrayList<String>();
-                mPrayerNameSNext  = new ArrayList<String>();
-                mPrayerNameTimeSNext = new ArrayList<String>();
+                mPrayerNameS = new ArrayList<>();
+                mPrayerNameTimeS = new ArrayList<>();
+                mPrayerNameSNext  = new ArrayList<>();
+                mPrayerNameTimeSNext = new ArrayList<>();
 
                 for (int i = 0; i < prayerName.size(); i++) {
                     mPrayerNameS.add(prayerName.get(i).text());
@@ -250,7 +250,7 @@ public class ProgressFragment extends Fragment {
                     mPraylistUrl.add(new Pray(prayerName.get(i).text(), prayerTime.get(i).text(), false));
                 }
                 mPraylistUrlFull.addAll(mPraylistUrl);
-                mPraylistUrlFull.addAll(mPraylistUrlNext);
+
 
                 mPrayFullOb.setPrayList(mPraylistUrlFull);
                 mPrayListActual = mPrayFullOb.getActualPrays(mPraylistUrlFull);
@@ -290,9 +290,9 @@ public class ProgressFragment extends Fragment {
             //  contentView.setText(content);
             // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
             // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
-            lv.setAdapter(adapter);
+            //lv.setAdapter(adapter);
            // prayAdapter = new PrayAdapter(getActivity().getBaseContext(), mPrayListActual);
-           // lv.setAdapter(prayAdapter);
+            lv.setAdapter(prayAdapter);
         }
 
         private String getContent(String path) throws IOException {
