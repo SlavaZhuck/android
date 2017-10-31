@@ -86,7 +86,6 @@ public class ProgressFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         lv = (ListView) view.findViewById(R.id.listView);
         //adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, mStringListActualToSave);
-        mPrayListActual.add(new Pray("aa",mCalendarCurrentTime));
         prayAdapter = new PrayAdapter(view.getContext(), mPrayList);
 
         progressTask = (ProgressTask) new ProgressTask().execute();
@@ -110,35 +109,25 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-       // lv.setAdapter(adapter);
-  //      mPrayListActual.add(new Pray("aa",mCalendarCurrentTime));
- //       prayAdapter = new PrayAdapter(this.getActivity().getBaseContext(), mPrayListActual);
         mCalendarCurrentTime.setTime(mCurrentDate);
 
-        mLastLocation = new String();
-        mLastLocation = MainActivity.Settings.getString("lastLocation", null);
-        if (mLastLocation != null)
-            city.setText(mLastLocation);
-        else
-            city.setText("Unknown");
         lv.setAdapter(prayAdapter);
+        updateDataFields();
+
+    }
+
+    public void updateDataFields() {
+        if (mLastLocation != null) {
+            city.setText(mLastLocation);
+        }else {
+            city.setText("Unknown");
+        }
 
         if (mPrayList.size() > 0) {
             nextPrayer.setText(mPrayList.get(0).getName());
             nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
-//            if(mPrayFullOb.getmPrayListSize()>0) {
-//                long seconds = (long) (mPrayFullOb.getTimeToNext() / 1000) % 60;
-//                long minutes = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60)) % 60);
-//                long hours = (long) ((mPrayFullOb.getTimeToNext() / (1000 * 60 * 60)) % 24);
-//                String formatted = String.format("H", hours);
-//                elapsedTime.setText("(- " + String.format("%02d:%02d", hours, minutes) + ")");
-//            }
-           // MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
-            //String elapsedTimeS = MainActivity.Settings.getString("elapsedTime", null); //читаем размер массива
-
- //           mPrayListActual = PrayFull.getActualPrays(mPrayList);
- //           String elapsedTimeS = PrayFull.getTimeToNext();
- //          elapsedTime.setText(elapsedTimeS);
+            String elapsedTimeS = PrayFull.getTimeToNext();
+            elapsedTime.setText(elapsedTimeS);
 
         } else {
             nextPrayer.setText("Unknown");
@@ -160,7 +149,8 @@ public class ProgressFragment extends Fragment {
         mCurrentDate = new Date();
         format.format(mCurrentDate);
 
-
+        mLastLocation = new String();
+        mLastLocation = MainActivity.Settings.getString("lastLocation", null);
         String arrPray[] ;
         String arrPrayName[] = new String[size];
         String arrPrayTime[] = new String[size];
@@ -168,6 +158,7 @@ public class ProgressFragment extends Fragment {
         long arrPrayTimeM[] = new long[size];
         Calendar currentCalendarDate = Calendar.getInstance();
         long millisFromStartOfDay = Calendar.getInstance().getTimeInMillis();
+
         millisFromStartOfDay = millisFromStartOfDay - currentCalendarDate.get(Calendar.HOUR_OF_DAY) * 1000l * 60l * 60l
                 - currentCalendarDate.get(Calendar.MINUTE) * 1000l * 60l - currentCalendarDate.get(Calendar.SECOND) * 1000l - currentCalendarDate.get(Calendar.MILLISECOND);
         if (mLoadedArrayPrayString.length > 0) {
@@ -279,12 +270,11 @@ public class ProgressFragment extends Fragment {
         @Override
         protected void onPostExecute(String content) {
 
-            // mContentText=content;
-            //  contentView.setText(content);
-            // webView.loadData(content, "text/html; charset=utf-8", "utf-8");
-            // Toast.makeText(getActivity(), "Data loaded", Toast.LENGTH_SHORT).show();
-            //lv.setAdapter(adapter);
-           // prayAdapter = new PrayAdapter(getActivity().getBaseContext(), mPrayListActual);
+//            nextPrayer.setText(mPrayList.get(0).getName());
+//            nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
+//            String elapsedTimeS = PrayFull.getTimeToNext();
+//            elapsedTime.setText(elapsedTimeS);
+            updateDataFields();
             lv.setAdapter(prayAdapter);
         }
 

@@ -10,53 +10,24 @@ import java.util.Date;
 
 public class PrayFull {
     //private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
-    private static Pray mClosestPray = new Pray();
-    private static long timeToNext;
-    private static long currentTimeMils;
-    private static int mPrayListSize = 0;
+    public static Pray mClosestPray;
+    public static long timeToNext;
+    public static long currentTimeMils;
 
     PrayFull() {
     }
 
-    public static int getmPrayListSize() {
-        return mPrayListSize;
-    }
-
-    //public ArrayList<Pray> getPrayList() {
-    //    return mPrayList;
-    //}
-
-    //public void setPrayList(ArrayList<Pray> prayList) {
-    //    mPrayList = prayList;
-   // }
-
-
-//    PrayFull(ArrayList<Pray> prayList) {
-//        mPrayList = prayList;
-//
-//    }
-
-//    public static int findClosestPray(Calendar currentDate){
-//        long currentDateinMills = currentDate.getTimeInMillis();
-//        for (int i =0; i< mPrayList.size();i++) {
-//            long time = mPrayList.get(i).getDate().getTimeInMillis();
-//         //   mPrayList.add(titles);
-//        }
-//
-//        return 0;
-//    }
-
-
     public static String getTimeToNext() {
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
-        long seconds = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / 1000) % 60;
-        long minutes = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60)) % 60;
-        long hours = (long) ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils)/ (1000 * 60 * 60)) % 24;
-        String formatted = String.format("H", hours);
-        String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
-
-        return elapsedTimeS;
-
+        if(mClosestPray!=null) {
+            long minutes = ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60)) % 60;
+            long hours = ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60 * 60)) % 24;
+            // String formatted = String.format("H", hours);
+            String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
+            return elapsedTimeS;
+        }else{
+            return "99:99";
+        }
     }
 
     public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList) {
@@ -68,13 +39,13 @@ public class PrayFull {
             if (time > currentTimeMils) {
                 actualPrays.add(prayList.get(i));
             }
-            //actualPrays.add(titles);
         }
-        if (prayList.size() > 0) {
+        if (actualPrays.size() > 0) {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
+            mClosestPray = actualPrays.get(0);
         }
-        mPrayListSize = prayList.size();
-        mClosestPray = actualPrays.get(0);
+
+
         return actualPrays;
     }
 }
