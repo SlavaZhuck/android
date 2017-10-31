@@ -9,7 +9,7 @@ import java.util.Date;
  */
 
 public class PrayFull {
-    private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
+    //private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
     private static Pray mClosestPray = new Pray();
     private static long timeToNext;
     private static long currentTimeMils;
@@ -22,19 +22,19 @@ public class PrayFull {
         return mPrayListSize;
     }
 
-    public ArrayList<Pray> getPrayList() {
-        return mPrayList;
-    }
+    //public ArrayList<Pray> getPrayList() {
+    //    return mPrayList;
+    //}
 
-    public void setPrayList(ArrayList<Pray> prayList) {
-        mPrayList = prayList;
-    }
+    //public void setPrayList(ArrayList<Pray> prayList) {
+    //    mPrayList = prayList;
+   // }
 
 
-    PrayFull(ArrayList<Pray> prayList) {
-        mPrayList = prayList;
-
-    }
+//    PrayFull(ArrayList<Pray> prayList) {
+//        mPrayList = prayList;
+//
+//    }
 
 //    public static int findClosestPray(Calendar currentDate){
 //        long currentDateinMills = currentDate.getTimeInMillis();
@@ -63,17 +63,17 @@ public class PrayFull {
         // Calendar currCal = ProgressFragment.mCalendarCurrentTime;
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
         ArrayList<Pray> actualPrays = new ArrayList<Pray>();
-        for (int i = 0; i < mPrayList.size(); i++) {
-            long time = mPrayList.get(i).getDate().getTimeInMillis();
+        for (int i = 0; i < prayList.size(); i++) {
+            long time = prayList.get(i).getDate().getTimeInMillis();
             if (time > currentTimeMils) {
-                actualPrays.add(mPrayList.get(i));
+                actualPrays.add(prayList.get(i));
             }
             //actualPrays.add(titles);
         }
-        if (mPrayList.size() > 0) {
+        if (prayList.size() > 0) {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
         }
-        mPrayListSize = mPrayList.size();
+        mPrayListSize = prayList.size();
         mClosestPray = actualPrays.get(0);
         return actualPrays;
     }

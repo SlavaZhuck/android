@@ -58,7 +58,8 @@ public class Pray {
         return mName;
     }
     public String getTime() {
-        return mDate.get(Calendar.HOUR_OF_DAY) + ":" + mDate.get(Calendar.MINUTE);
+        
+        return String.format("%02d:%02d",mDate.get(Calendar.HOUR_OF_DAY),mDate.get(Calendar.MINUTE));
     }
 
     public void setName(String name) {
