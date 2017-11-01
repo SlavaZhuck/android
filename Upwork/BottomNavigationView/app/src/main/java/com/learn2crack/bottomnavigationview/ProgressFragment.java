@@ -131,9 +131,9 @@ public class ProgressFragment extends Fragment {
             city.setText("Unknown");
         }
         if((int)PrayFull.getTimeToNextInMillis()>0) {
-            scheduleNotification(getNotification("5 second delay"), (int) PrayFull.getTimeToNextInMillis());
+            scheduleNotification(getNotification("Pray is now"), (int) PrayFull.getTimeToNextInMillis());
         }
-        scheduleNotification(getNotification("20 second delay"), 20000);
+        //scheduleNotification(getNotification("20 second delay"), 20000);
         if (mPrayList.size() > 0) {
             nextPrayer.setText(mPrayList.get(0).getName());
             nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
@@ -365,7 +365,7 @@ public class ProgressFragment extends Fragment {
 
     public Notification getNotification(String content) {
         Notification.Builder builder = new Notification.Builder(getActivity());
-        builder.setContentTitle("Scheduled Notification");
+        builder.setContentTitle("Scheduled Notification for Pray");
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.background_home);
         return builder.build();
