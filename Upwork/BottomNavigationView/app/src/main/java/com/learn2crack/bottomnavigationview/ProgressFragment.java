@@ -72,7 +72,8 @@ public class ProgressFragment extends Fragment {
     private ArrayList<Pray> mPraylistUrl = new ArrayList<>();
     private ArrayList<Pray> mPraylistUrlNext = new ArrayList<>();
     private ArrayList<Pray> mPraylistUrlFull = new ArrayList<>();
-  //  private ArrayList<Pray> mPraylistToShow = new ArrayList<>();
+    private long mClosestPrayTime;
+    //  private ArrayList<Pray> mPraylistToShow = new ArrayList<>();
   //  private PrayFull mPrayFullOb = new PrayFull();
 
 
@@ -128,6 +129,7 @@ public class ProgressFragment extends Fragment {
         if (mPrayList.size() > 0) {
             nextPrayer.setText(mPrayList.get(0).getName());
             nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
+            PrayFull.mClosestPrayTime = mClosestPrayTime;
             String elapsedTimeS = PrayFull.getTimeToNext();
             elapsedTime.setText(elapsedTimeS);
 
@@ -143,7 +145,7 @@ public class ProgressFragment extends Fragment {
         MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
         int size = MainActivity.Settings.getInt("prayActualSize", 0); //читаем размер массива
         int sizeToShow = MainActivity.Settings.getInt("prayShowSize", 0); //читаем размер массива
-
+        mClosestPrayTime = MainActivity.Settings.getLong("prayActualTime", 0); //читаем размер массива
         mLoadedArrayActualPrayString = new String[size]; //аллоцируем массив
         for (int i = 0; i < mLoadedArrayActualPrayString.length; i++)
             mLoadedArrayActualPrayString[i] = MainActivity.Settings.getString("prayArrayActual" + i, null); //заполняем элементы массив
@@ -282,7 +284,7 @@ public class ProgressFragment extends Fragment {
 
                 MainActivity.Settings = getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = MainActivity.Settings.edit();
-
+                editor.putLong("prayActualTime", PrayFull.mClosestPrayTime);
                 if (mStringListActualToSave.size() > 0) {
                     editor.putInt("prayActualSize", mStringListActualToSave.size());
                     for (int i = 0; i < mStringListActualToSave.size(); i++)

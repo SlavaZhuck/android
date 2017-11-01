@@ -1,5 +1,9 @@
 package com.learn2crack.bottomnavigationview;
 
+import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +14,7 @@ import java.util.Date;
 
 public class PrayFull {
     //private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
-    public static Pray mClosestPray;
+    public static long mClosestPrayTime;
     public static long timeToNext;
     public static long currentTimeMils;
 
@@ -19,9 +23,9 @@ public class PrayFull {
 
     public static String getTimeToNext() {
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
-        if(mClosestPray!=null) {
-            long minutes = ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60)) % 60;
-            long hours = ((mClosestPray.getDate().getTimeInMillis() - currentTimeMils) / (1000 * 60 * 60)) % 24;
+        if(mClosestPrayTime>1) {
+            long minutes = ((mClosestPrayTime - currentTimeMils) / (1000 * 60)) % 60;
+            long hours = ((mClosestPrayTime - currentTimeMils) / (1000 * 60 * 60)) % 24;
             // String formatted = String.format("H", hours);
             String elapsedTimeS = new String("(- " + String.format("%02d:%02d", hours, minutes) + ")");
             return elapsedTimeS;
@@ -42,7 +46,7 @@ public class PrayFull {
         }
         if (actualPrays.size() > 0) {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
-            mClosestPray = actualPrays.get(0);
+            mClosestPrayTime = actualPrays.get(0).getTimeInMillis();
         }
 
 
