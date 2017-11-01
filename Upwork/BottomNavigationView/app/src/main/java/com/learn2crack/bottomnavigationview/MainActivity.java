@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void requestPermission() {
+    public boolean requestPermission() {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -254,6 +254,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
+            return false;
+        }else{
+            return true;
         }
     }
 
