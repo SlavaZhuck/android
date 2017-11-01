@@ -4,10 +4,15 @@ package com.learn2crack.bottomnavigationview;
  * Created by Juk_VA on 27.09.2017.
  */
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,7 +130,10 @@ public class ProgressFragment extends Fragment {
         }else {
             city.setText("Unknown");
         }
-
+        if((int)PrayFull.getTimeToNextInMillis()>0) {
+            scheduleNotification(getNotification("5 second delay"), (int) PrayFull.getTimeToNextInMillis());
+        }
+        scheduleNotification(getNotification("20 second delay"), 20000);
         if (mPrayList.size() > 0) {
             nextPrayer.setText(mPrayList.get(0).getName());
             nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
@@ -210,8 +218,6 @@ public class ProgressFragment extends Fragment {
                 mPrayListShow.add(new Pray(arrPrayName[i], currentCalendarDate));
             }
         }
-
-
     }
 
 
@@ -298,7 +304,7 @@ public class ProgressFragment extends Fragment {
                         editor.putString("prayArrayShow" + i, mPraylistUrl.get(i).getName() + " " + String.format("%02d:%02d", mPraylistUrl.get(i).getDate().get(Calendar.HOUR_OF_DAY), mPraylistUrl.get(i).getDate().get(Calendar.MINUTE))); //складываем элементы массива
                     editor.commit();
                 }
-                
+
               //  if (mPrayFullOb.getmPrayListSize() > 0) {
                //     editor.putString("elapsedTime", mPrayFullOb.getTimeToNext());
               //      editor.commit();
@@ -344,5 +350,24 @@ public class ProgressFragment extends Fragment {
                 }
             }
         }
+    }
+    public void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(getActivity(), NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    public Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(getActivity());
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.background_home);
+        return builder.build();
     }
 }

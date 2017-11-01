@@ -34,6 +34,15 @@ public class PrayFull {
         }
     }
 
+    public static long getTimeToNextInMillis() {
+        currentTimeMils = Calendar.getInstance().getTimeInMillis();
+        if(mClosestPrayTime>1) {
+             return mClosestPrayTime-currentTimeMils;
+        }else{
+            return -1;
+        }
+    }
+
     public static ArrayList<Pray> getActualPrays(ArrayList<Pray> prayList) {
         // Calendar currCal = ProgressFragment.mCalendarCurrentTime;
         currentTimeMils = Calendar.getInstance().getTimeInMillis();

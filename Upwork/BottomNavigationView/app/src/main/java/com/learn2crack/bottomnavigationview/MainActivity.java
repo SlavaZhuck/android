@@ -2,8 +2,12 @@ package com.learn2crack.bottomnavigationview;
 
 import android.*;
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -12,6 +16,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -131,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
+
     }
 
     private void loadDuaFragment() {
@@ -284,5 +290,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // permissions this app might request
         }
     }
+
+
+
 
 }
