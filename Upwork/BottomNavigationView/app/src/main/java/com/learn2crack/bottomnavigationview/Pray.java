@@ -52,6 +52,7 @@ public class Pray {
         }
         mName = name;
         mDate = currentCalendarDate;
+
     }
 
     public String getName() {
