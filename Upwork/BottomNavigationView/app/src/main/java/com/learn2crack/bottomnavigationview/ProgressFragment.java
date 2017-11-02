@@ -50,10 +50,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class ProgressFragment extends Fragment {
     // благодоря этому классу мы будет разбирать данные на куски
     public Elements title;
-    //public String mTitleStr;
     // то в чем будем хранить данные пока не передадим адаптеру
-    public ArrayList<String> mStringListActualToSave = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
     private ListView lv;
     private TextView city;
     private TextView nextPrayer;
@@ -61,22 +58,14 @@ public class ProgressFragment extends Fragment {
     private TextView elapsedTime;
     private ProgressTask progressTask;
     private PrayAdapter prayAdapter;
-    private static Calendar mCalendarCurrentTime = Calendar.getInstance();
-    private static Calendar mCalendarNextTime = Calendar.getInstance();
     private Date mCurrentDate;
-    private ArrayList<String> mPrayerNameS = new ArrayList<>();
-    private ArrayList<String> mPrayerNameTimeS = new ArrayList<>();
-    private ArrayList<String> mPrayerNameSNext = new ArrayList<>();
-    private ArrayList<String> mPrayerNameTimeSNext = new ArrayList<>();
+
     private ArrayList<Pray> mPrayList = new ArrayList<>();
-    private ArrayList<Pray> mPrayListActual = new ArrayList<>();
     private ArrayList<Pray> mPrayListShow = new ArrayList<>();
     private String[] mLoadedArrayActualPrayString;
     private String[] mLoadedArrayShowPrayString;
     private String mLastLocation;
-    private ArrayList<Pray> mPraylistUrl = new ArrayList<>();
-    private ArrayList<Pray> mPraylistUrlNext = new ArrayList<>();
-    private ArrayList<Pray> mPraylistUrlFull = new ArrayList<>();
+
     private long mClosestPrayTime;
     //  private ArrayList<Pray> mPraylistToShow = new ArrayList<>();
   //  private PrayFull mPrayFullOb = new PrayFull();
@@ -117,7 +106,7 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-        mCalendarCurrentTime.setTime(mCurrentDate);
+      //
 
         lv.setAdapter(prayAdapter);
         updateDataFields();
@@ -229,6 +218,20 @@ public class ProgressFragment extends Fragment {
 
 
     private class ProgressTask extends AsyncTask<String, Void, String> {
+        private ArrayList<String> mPrayerNameS = new ArrayList<>();
+        private ArrayList<String> mPrayerNameTimeS = new ArrayList<>();
+        private ArrayList<String> mPrayerNameSNext = new ArrayList<>();
+        private ArrayList<String> mPrayerNameTimeSNext = new ArrayList<>();
+        public ArrayList<String> mStringListActualToSave = new ArrayList<>();
+
+        private ArrayList<Pray> mPraylistUrl = new ArrayList<>();
+        private ArrayList<Pray> mPraylistUrlNext = new ArrayList<>();
+        private ArrayList<Pray> mPraylistUrlFull = new ArrayList<>();
+        private ArrayList<Pray> mPrayListActual = new ArrayList<>();
+
+        private Calendar mCalendarCurrentTime = Calendar.getInstance();
+        private Calendar mCalendarNextTime = Calendar.getInstance();
+
         @Override
         protected String doInBackground(String... path) {
 
@@ -238,11 +241,14 @@ public class ProgressFragment extends Fragment {
             String urlNext ;
             mCalendarCurrentTime = Calendar.getInstance();
             mCalendarNextTime = Calendar.getInstance();
+            //??
+            mCalendarCurrentTime.setTime(mCurrentDate);
+            //
             mCalendarNextTime.setTimeInMillis(mCalendarCurrentTime.getTimeInMillis()+ 86400000l);
-            String currentYear = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.YEAR));
+            String currentYear  = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.YEAR));
             String currentMonth = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.MONTH) + 1);
-            String currentDay = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH));
-            String nextDay = "/" + String.valueOf(mCalendarNextTime.get(mCalendarNextTime.DAY_OF_MONTH) );
+            String currentDay   = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH));
+            String nextDay      = "/" + String.valueOf(mCalendarNextTime.get(mCalendarNextTime.DAY_OF_MONTH) );
             String currentPlace = "/415"; //for Male city
             url = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + currentDay;
             urlNext = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + nextDay;
@@ -278,6 +284,7 @@ public class ProgressFragment extends Fragment {
                 }
                 mPraylistUrlFull.addAll(mPraylistUrl);
                 mPraylistUrlFull.addAll(mPraylistUrlNext);
+                //==========================================
 
                 mPrayListActual = PrayFull.getActualPrays(mPraylistUrlFull);
 
@@ -290,7 +297,9 @@ public class ProgressFragment extends Fragment {
 
                 MainActivity.Settings = getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = MainActivity.Settings.edit();
+
                 editor.putLong("prayActualTime", PrayFull.mClosestPrayTime);
+
                 if (mStringListActualToSave.size() > 0) {
                     editor.putInt("prayActualSize", mStringListActualToSave.size());
                     for (int i = 0; i < mStringListActualToSave.size(); i++)
@@ -305,10 +314,6 @@ public class ProgressFragment extends Fragment {
                     editor.commit();
                 }
 
-              //  if (mPrayFullOb.getmPrayListSize() > 0) {
-               //     editor.putString("elapsedTime", mPrayFullOb.getTimeToNext());
-              //      editor.commit();
-              //  }
                 mPrayListShow.clear();
                 mPrayListShow.addAll(mPraylistUrl);
 
@@ -321,10 +326,6 @@ public class ProgressFragment extends Fragment {
         @Override
         protected void onPostExecute(String content) {
 
-//            nextPrayer.setText(mPrayList.get(0).getName());
-//            nextPrayerTime.setText(mPrayList.get(0).getDate().get(Calendar.HOUR_OF_DAY) + ":" + mPrayList.get(0).getDate().get(Calendar.MINUTE));
-//            String elapsedTimeS = PrayFull.getTimeToNext();
-//            elapsedTime.setText(elapsedTimeS);
             updateDataFields();
             lv.setAdapter(prayAdapter);
         }
