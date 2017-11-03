@@ -122,9 +122,9 @@ public class ProgressFragment extends Fragment {
         //format.format(mCurrentDate);
         //mCalendarCurrentTime.setTime(mCurrentDate);
 
-        lv.setAdapter(prayAdapter);
-        updateDataFields();
 
+        updateDataFields();
+        lv.setAdapter(prayAdapter);
     }
 
     public void updateDataFields() {
@@ -143,7 +143,7 @@ public class ProgressFragment extends Fragment {
             String elapsedTimeS = PrayFull.getTimeToNext();
             elapsedTime.setText(elapsedTimeS);
             if((int)PrayFull.getTimeToNextInMillis()>0) {
-                scheduleNotification(getNotification("Pray is now"), (int) PrayFull.getTimeToNextInMillis());
+                scheduleNotification(getNotification("Pray" + mPrayList.get(0).getName() + " is now","Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
             }
         } else {
             nextPrayer.setText("Unknown");
@@ -308,9 +308,9 @@ public class ProgressFragment extends Fragment {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    public Notification getNotification(String content) {
+    public Notification getNotification(String content, String title) {
         Notification.Builder builder = new Notification.Builder(getActivity());
-        builder.setContentTitle("Scheduled Notification for Pray");
+        builder.setContentTitle(title);//"Scheduled Notification for Pray");
         builder.setContentText(content);
         builder.setSmallIcon(R.drawable.background_home);
         return builder.build();

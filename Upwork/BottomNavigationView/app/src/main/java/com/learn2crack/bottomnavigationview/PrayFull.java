@@ -47,6 +47,7 @@ public class PrayFull {
         // Calendar currCal = ProgressFragment.mCalendarCurrentTime;
         currentTimeMils = Calendar.getInstance().getTimeInMillis();
         ArrayList<Pray> actualPrays = new ArrayList<Pray>();
+        ArrayList<Pray> actualPraysShort = new ArrayList<Pray>();
         for (int i = 0; i < prayList.size(); i++) {
             long time = prayList.get(i).getDate().getTimeInMillis();
             if (time > currentTimeMils) {
@@ -57,7 +58,11 @@ public class PrayFull {
             timeToNext = actualPrays.get(0).getDate().getTimeInMillis() - currentTimeMils;
             mClosestPrayTime = actualPrays.get(0).getTimeInMillis();
         }
-
+//        if (prayList.size() > 5) {
+//            for(int i =0; i<=5; i++) {
+//                actualPraysShort.add(prayList.get(i));
+//            }
+//        }
 
         return actualPrays;
     }

@@ -31,7 +31,12 @@ public class PrayAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return objects.size();
+        if(objects.size()>5){
+            return 6;
+        }else{
+            return objects.size();
+        }
+
     }
 
     @Override
