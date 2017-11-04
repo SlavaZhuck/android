@@ -15,4 +15,6 @@
     <string name="title_qibla">Qibla</string>
     <string name="title_more">More</string>
     <string name="text_download">Download</string>
+    <string name="text_Evening_button">EVENING</string>
+    <string name="text_Morning_button">MORNING</string>
 </resources>

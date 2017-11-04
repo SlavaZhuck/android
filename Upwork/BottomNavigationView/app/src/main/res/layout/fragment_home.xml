@@ -28,14 +28,14 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
             android:text="nextPrayer"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nextPrayTime" />
+            app:layout_constraintTop_toBottomOf="@+id/nextPrayTime"
+            app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
             android:id="@+id/nextPrayerText"
@@ -54,32 +54,28 @@
             android:id="@+id/nextPrayTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:text="nextPrayTime"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="8dp"
+            android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:text="city"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nextPrayerText" />
+            app:layout_constraintTop_toBottomOf="@+id/nextPrayerText"/>
 
         <TextView
             android:id="@+id/elapsedTime"
@@ -89,13 +85,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
             android:text="elapsedTime"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nextPrayTime"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 
@@ -103,12 +100,58 @@
         android:id="@+id/contentFragment"
         android:name="com.learn2crack.bottomnavigationview.ProgressFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="305dp"
 
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:layout="@layout/fragment_progress" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout="@layout/fragment_progress"/>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorWhite"
+        android:shape="oval"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contentFragment"
+        app:srcCompat="@mipmap/ic_night"/>
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorWhite"
+        android:onClick="onClickMorning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contentFragment"
+        app:srcCompat="@mipmap/ic_day"/>
+
+    <TextView
+        android:id="@+id/textViewEvening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_Evening_button"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/contentFragment"/>
+
+    <TextView
+        android:id="@+id/textViewMorning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_Morning_button"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintTop_toBottomOf="@+id/contentFragment"/>
 
 </android.support.constraint.ConstraintLayout>

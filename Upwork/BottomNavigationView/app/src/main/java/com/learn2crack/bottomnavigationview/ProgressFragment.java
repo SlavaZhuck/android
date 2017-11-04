@@ -78,6 +78,7 @@ public class ProgressFragment extends Fragment {
     private ArrayList<Pray> mPraylistUrlNext = new ArrayList<>();
     private ArrayList<Pray> mPraylistUrlFull = new ArrayList<>();
     private long mClosestPrayTime;
+    private Thread t;
     //  private ArrayList<Pray> mPraylistToShow = new ArrayList<>();
   //  private PrayFull mPrayFullOb = new PrayFull();
 
@@ -98,6 +99,28 @@ public class ProgressFragment extends Fragment {
 
         progressTask = (ProgressTask) new ProgressTask().execute();
 
+        t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here!
+                                String elapsedTimeS = PrayFull.getTimeToNext();
+                                elapsedTime.setText(elapsedTimeS);
+                            }
+                        });
+                        Thread.sleep(1000);
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
         return view;
     }
 
@@ -105,6 +128,7 @@ public class ProgressFragment extends Fragment {
     public void onStop() {
         super.onStop();
         progressTask.cancel(true);
+        t.interrupt();
     }
 
     @Override
@@ -122,7 +146,7 @@ public class ProgressFragment extends Fragment {
         //format.format(mCurrentDate);
         //mCalendarCurrentTime.setTime(mCurrentDate);
 
-
+        t.start();
         updateDataFields();
         lv.setAdapter(prayAdapter);
     }
@@ -140,8 +164,7 @@ public class ProgressFragment extends Fragment {
 
             nextPrayer.setText(mPrayList.get(0).getName());
             nextPrayerTime.setText(mPrayList.get(0).getTime());
-            String elapsedTimeS = PrayFull.getTimeToNext();
-            elapsedTime.setText(elapsedTimeS);
+
             if((int)PrayFull.getTimeToNextInMillis()>0) {
                 scheduleNotification(getNotification("Pray" + mPrayList.get(0).getName() + " is now","Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
             }
@@ -188,6 +211,7 @@ public class ProgressFragment extends Fragment {
     public void onPause() {
         super.onPause();
         progressTask.cancel(true);
+        t.interrupt();
     }
 
 
@@ -312,7 +336,15 @@ public class ProgressFragment extends Fragment {
         Notification.Builder builder = new Notification.Builder(getActivity());
         builder.setContentTitle(title);//"Scheduled Notification for Pray");
         builder.setContentText(content);
-        builder.setSmallIcon(R.drawable.background_home);
+        builder.setSmallIcon(R.drawable.ic_notification);
         return builder.build();
+    }
+
+    public void onClickEvening(){
+
+    }
+
+    public void onClickMorning(){
+
     }
 }
