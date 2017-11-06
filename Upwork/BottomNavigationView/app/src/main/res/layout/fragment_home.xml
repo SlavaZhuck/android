@@ -117,10 +117,11 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorWhite"
+        android:onClick="onClickEvening"
         android:shape="oval"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contentFragment"
-        app:srcCompat="@mipmap/ic_night"/>
+        app:srcCompat="@mipmap/ic_night" />
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -132,7 +133,7 @@
         android:onClick="onClickMorning"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contentFragment"
-        app:srcCompat="@mipmap/ic_day"/>
+        app:srcCompat="@mipmap/ic_day" />
 
     <TextView
         android:id="@+id/textViewEvening"

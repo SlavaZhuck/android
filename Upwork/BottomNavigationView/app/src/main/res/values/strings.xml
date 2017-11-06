@@ -17,4 +17,10 @@
     <string name="text_download">Download</string>
     <string name="text_Evening_button">EVENING</string>
     <string name="text_Morning_button">MORNING</string>
+    <string name="unknown">Unknown</string>
+    <string name="Pray">Pray</string>
+    <string name="Isnow"> is now</string>
+    <string name="NotificationforPray"> Notification for Pray</string>
+
+
 </resources>

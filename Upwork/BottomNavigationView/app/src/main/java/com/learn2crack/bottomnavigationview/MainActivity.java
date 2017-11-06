@@ -1,13 +1,8 @@
 package com.learn2crack.bottomnavigationview;
 
-import android.*;
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -16,7 +11,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -25,27 +19,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import android.location.LocationListener;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    private BottomNavigationView mBottomNavigationView;
     private Geocoder geocoder;
     private LocationManager mLocationManager;
-    private String provider;
-     public static List<Address> addresses;
+    public static List<Address> addresses;
     // это будет именем файла настроек
     public static final String APP_PREFERENCES = "mysettings";
-    public static final String APP_PREFERENCES_COUNTER = "counter";
     public static SharedPreferences Settings;
     private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 1;
 
@@ -76,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
-        provider = mLocationManager.getBestProvider(criteria, false);
+        String provider = mLocationManager.getBestProvider(criteria, false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -92,17 +82,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (location != null) {
             System.out.println("Provider " + provider + " has been selected.");
             onLocationChanged(location);
-        } else {
-            //     mLatTextView.setText("Location not available");
-            //      mLonTextView.setText("Location not available");
         }
-
 
     }
 
     private void setupBottomNavigation() {
 
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        BottomNavigationView mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -198,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(Location location) {
-        double lat = (double) (location.getLatitude());
-        double lon = (double) (location.getLongitude());
+        double lat =  (location.getLatitude());
+        double lon =  (location.getLongitude());
 
         try {
             addresses = geocoder.getFromLocation(lat, lon, 1);
@@ -208,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Settings = getSharedPreferences(MainActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = MainActivity.Settings.edit();
             editor.putString("lastLocation", addresses.get(0).getLocality()); //складываем элементы массива
-            editor.commit();
+            editor.apply();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -283,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
+
             }
 
             // other 'case' lines to check for other
@@ -291,7 +277,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
+    public void onClickEvening(View view){
 
+    }
+
+    public void onClickMorning(View view){
+
+    }
 
 
 }
