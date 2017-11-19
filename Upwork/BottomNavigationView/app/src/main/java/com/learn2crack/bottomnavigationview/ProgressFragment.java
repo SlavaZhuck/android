@@ -127,7 +127,7 @@ public class ProgressFragment extends Fragment {
             nextPrayerTime.setText(mPrayList.get(0).getTime());
 
             if((int)PrayFull.getTimeToNextInMillis()>0) {
-                scheduleNotification(getNotification(R.string.Pray + mPrayList.get(0).getName() + R.string.Isnow,"Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
+                scheduleNotification(getNotification(getResources().getString(R.string.Pray) + " " + mPrayList.get(0).getName() + " " + getResources().getString(R.string.Isnow),"Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
             }
         } else {
             nextPrayer.setText(R.string.unknown);
