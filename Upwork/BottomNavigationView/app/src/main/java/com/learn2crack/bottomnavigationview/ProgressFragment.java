@@ -107,7 +107,7 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-         t.start();
+        t.start();
         updateDataFields();
         lv.setAdapter(prayAdapter);
     }
@@ -147,7 +147,7 @@ public class ProgressFragment extends Fragment {
 
        // mLastLocation = new String();
         mLastLocation = MainActivity.Settings.getString("lastLocation", null);
-        String arrPray[] ;
+        String arrPray[] = new String[2] ;
         String arrPrayName[] = new String[size];
         //String arrPrayTime[] = new String[size];
         String arrPrayTimeImMillis[] = new String[size];
@@ -182,8 +182,8 @@ public class ProgressFragment extends Fragment {
 
             // класс который захватывает страницу
             Document doc, docNext;
-            String url ;
-            String urlNext ;
+            String url = new String();
+            String urlNext = new String();
             mCalendarCurrentTime = Calendar.getInstance();
             Calendar mCalendarNextTime = Calendar.getInstance();
             mCalendarNextTime.setTimeInMillis(mCalendarCurrentTime.getTimeInMillis()+ 86400000l);

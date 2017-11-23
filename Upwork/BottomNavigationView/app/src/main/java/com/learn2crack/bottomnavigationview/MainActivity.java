@@ -278,7 +278,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void onClickEvening(View view){
-
+        EveningFragment fragment = EveningFragment.getEveningFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_frame, fragment);
+        ft.commit();
     }
 
     public void onClickMorning(View view){

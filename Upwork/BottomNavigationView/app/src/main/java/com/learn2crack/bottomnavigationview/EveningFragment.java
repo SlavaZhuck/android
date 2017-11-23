@@ -8,19 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by Admin on 19.11.2017.
+ * Created by Juk_VA on 23.11.2017.
  */
 
-public class MorningFragment extends Fragment {
-    private static MorningFragment m_A = new MorningFragment();
+public class EveningFragment extends Fragment {
+    private static EveningFragment m_A = new EveningFragment();
 
-    static MorningFragment getMorningFragment() {
+    static EveningFragment getEveningFragment() {
         return m_A;
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.morning_fragment, container, false);
+        return inflater.inflate(R.layout.evening_fragment, container, false);
     }
 
     @Override
@@ -53,3 +53,4 @@ public class MorningFragment extends Fragment {
         super.onDestroy();
     }
 }
+
