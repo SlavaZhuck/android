@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static final String APP_PREFERENCES = "mysettings";
     public static SharedPreferences Settings;
     private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION = 1;
-
+    private BottomNavigationView mBottomNavigationView;
+    private Toolbar toolbar;
+    private String mdateString;
     // private Toolbar mAppToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +48,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setupBottomNavigation();
         // ActionBar actionBar = getActionBar();
-        String dateString = DateFormat.format("EEEE d MMMM", new Date()).toString();
+        mdateString = DateFormat.format("EEEE d MMMM", new Date()).toString();
         setSupportActionBar(toolbar);
-        toolbar.setTitle(dateString);
+        toolbar.setTitle(mdateString);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private void setupBottomNavigation() {
 
-        BottomNavigationView mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -121,7 +123,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         HomeFragment fragment = HomeFragment.getHomeFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
+        //ft.addToBackStack(null);
         ft.commit();
+        toolbar.setVisibility(View.VISIBLE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
 
     }
 
@@ -131,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
+        toolbar.setVisibility(View.VISIBLE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     private void loadNavigationFragment() {
@@ -139,7 +146,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
-    }
+        toolbar.setVisibility(View.VISIBLE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
+   }
 
     private void loadQuranFragment() {
 
@@ -147,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
+        toolbar.setVisibility(View.VISIBLE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
     }
 
     private void loadMoreFragment() {
@@ -155,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
+        toolbar.setVisibility(View.VISIBLE);
+        mBottomNavigationView.setVisibility(View.VISIBLE);
     }
 
 
@@ -173,6 +186,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1, this);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLocationManager.removeUpdates(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationManager.removeUpdates(this);
     }
 
     /* Remove the locationlistener updates when Activity is paused */
@@ -282,16 +307,46 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, fragment);
         ft.commit();
+        loadNewToolbar();
+        //toolbar.setVisibility(View.GONE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // what do you want here
+                refreshToolbar();
+                loadHomeFragment();
+
+            }
+        });
     }
 
     public void onClickMorning(View view){
 
         MorningFragment fragment = MorningFragment.getMorningFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_frame, fragment);
-            ft.commit();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_frame, fragment);
+        ft.commit();
+        loadNewToolbar();
+        //toolbar.setVisibility(View.GONE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // what do you want here
+                refreshToolbar();
+                loadHomeFragment();
 
+            }
+        });
+    }
+    public void refreshToolbar(){
+        //toolbar.removeAllViews();
+        toolbar.setNavigationIcon(null);
+        toolbar.setTitle(mdateString);
     }
 
-
+    public void loadNewToolbar(){
+        mBottomNavigationView.setVisibility(View.GONE);
+        toolbar.setTitle("");
+        toolbar.setNavigationIcon(R.drawable.ic_back);
+    }
 }

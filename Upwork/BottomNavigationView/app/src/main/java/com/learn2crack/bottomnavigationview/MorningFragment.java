@@ -1,11 +1,14 @@
 package com.learn2crack.bottomnavigationview;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * Created by Admin on 19.11.2017.
@@ -20,7 +23,12 @@ public class MorningFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.morning_fragment, container, false);
+
+        View view = inflater.inflate(R.layout.morning_fragment, container, false);
+        TextView yourTextView = (TextView) view.findViewById(R.id.textMorning);
+        Typeface myTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/waheed.otf");
+        yourTextView.setTypeface(myTypeface);
+        return view;
     }
 
     @Override
@@ -52,4 +60,5 @@ public class MorningFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
+
 }

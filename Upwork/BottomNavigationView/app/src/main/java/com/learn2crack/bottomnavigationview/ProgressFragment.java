@@ -1,9 +1,6 @@
 package com.learn2crack.bottomnavigationview;
 
-/**
- * Created by Juk_VA on 27.09.2017.
- */
-
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -19,19 +16,13 @@ import android.view.ViewGroup;
 import android.os.AsyncTask;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.net.ssl.HttpsURLConnection;
 
 public class ProgressFragment extends Fragment {
     // то в чем будем хранить данные пока не передадим адаптеру
@@ -98,6 +89,13 @@ public class ProgressFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        progressTask.cancel(true);
+        t.interrupt();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         restoreData();
@@ -146,11 +144,14 @@ public class ProgressFragment extends Fragment {
             mLoadedArrayActualPrayString[i] = MainActivity.Settings.getString("prayArrayActual" + i, null); //заполняем элементы массив
 
        // mLastLocation = new String();
-        mLastLocation = MainActivity.Settings.getString("lastLocation", null);
-        String arrPray[] = new String[2] ;
+        if(MainActivity.Settings.getString("lastLocation", null)!= null){
+            mLastLocation = MainActivity.Settings.getString("lastLocation", null);
+        }else{
+            mLastLocation = "Unknown";
+        }
+        String arrPray[];
         String arrPrayName[] = new String[size];
-        //String arrPrayTime[] = new String[size];
-        String arrPrayTimeImMillis[] = new String[size];
+         String arrPrayTimeImMillis[] = new String[size];
 
         if (mLoadedArrayActualPrayString.length > 0) {
             mPrayList.clear();
@@ -176,21 +177,23 @@ public class ProgressFragment extends Fragment {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     private class ProgressTask extends AsyncTask<String, Void, String> {
+        @SuppressLint("DefaultLocale")
         @Override
         protected String doInBackground(String... path) {
 
             // класс который захватывает страницу
             Document doc, docNext;
-            String url = new String();
-            String urlNext = new String();
-            mCalendarCurrentTime = Calendar.getInstance();
+            String url ;
+            String urlNext;
+            //mCalendarCurrentTime = Calendar.getInstance();
             Calendar mCalendarNextTime = Calendar.getInstance();
-            mCalendarNextTime.setTimeInMillis(mCalendarCurrentTime.getTimeInMillis()+ 86400000l);
-            String currentYear = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.YEAR));
-            String currentMonth = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.MONTH) + 1);
-            String currentDay = "/" + String.valueOf(mCalendarCurrentTime.getInstance().get(mCalendarCurrentTime.DAY_OF_MONTH));
-            String nextDay = "/" + String.valueOf(mCalendarNextTime.get(mCalendarNextTime.DAY_OF_MONTH) );
+            mCalendarNextTime.setTimeInMillis(Calendar.getInstance().getTimeInMillis()+ 86400000L);
+            String currentYear = "/" + String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+            String currentMonth = "/" + String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1);
+            String currentDay = "/" + String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+            String nextDay = "/" + String.valueOf(mCalendarNextTime.get(Calendar.DAY_OF_MONTH) );
             String currentPlace = "/415"; //for Male city
             url = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + currentDay;
             urlNext = "http://namaadhuvaguthu.com/en/prayertimes" + currentPlace + currentYear + currentMonth + nextDay;
