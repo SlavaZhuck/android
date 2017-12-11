@@ -37,7 +37,7 @@ public class ProgressFragment extends Fragment {
     private static Calendar mCalendarCurrentTime = Calendar.getInstance();
     private ArrayList<Pray> mPrayList = new ArrayList<>();
     private String mLastLocation;
-    private Thread t;
+    public static Thread t;
 
 
     @Override
@@ -53,30 +53,6 @@ public class ProgressFragment extends Fragment {
         lv = (ListView) view.findViewById(R.id.listView);
         //adapter = new ArrayAdapter<String>(view.getContext(), R.layout.list_item, R.id.pray_name, mStringListActualToSave);
         prayAdapter = new PrayAdapter(view.getContext(), mPrayList);
-
-        progressTask = (ProgressTask) new ProgressTask().execute();
-
-        t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // update TextView here!
-                                String elapsedTimeS = PrayFull.getTimeToNext();
-                                elapsedTime.setText(elapsedTimeS);
-                            }
-                        });
-                        Thread.sleep(1000);
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
 
         return view;
     }
@@ -98,9 +74,31 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        progressTask = (ProgressTask) new ProgressTask().execute();
+        t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here!
+                                String elapsedTimeS = PrayFull.getTimeToNext();
+                                elapsedTime.setText(elapsedTimeS);
+                            }
+                        });
+                        Thread.sleep(1000);
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
         restoreData();
 
-        city = (TextView) this.getActivity().findViewById(R.id.city);
+        //city = (TextView) this.getActivity().findViewById(R.id.city);
         nextPrayer = (TextView) this.getActivity().findViewById(R.id.nextPrayer);
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
@@ -111,11 +109,11 @@ public class ProgressFragment extends Fragment {
     }
 
     public void updateDataFields() {
-        if (mLastLocation != null) {
-            city.setText(mLastLocation);
-        }else {
-            city.setText(R.string.unknown);
-        }
+        //if (mLastLocation != null) {
+        //    city.setText(mLastLocation);
+       // }else {
+       //     city.setText(R.string.unknown);
+        //}
 
         //scheduleNotification(getNotification("20 second delay"), 20000);
         if (mPrayList.size() > 0) {

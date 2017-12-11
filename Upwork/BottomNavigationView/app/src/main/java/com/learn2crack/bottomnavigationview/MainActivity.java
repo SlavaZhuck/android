@@ -10,6 +10,7 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         toolbar.setTitle(mdateString);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorWhite));
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorBlack));
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setElevation(0);
+        }
         if (savedInstanceState == null) {
             loadHomeFragment();
         }
@@ -192,12 +195,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onStop() {
         super.onStop();
         mLocationManager.removeUpdates(this);
+        if(ProgressFragment.t.isAlive()) {
+            ProgressFragment.t.interrupt();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mLocationManager.removeUpdates(this);
+        if(ProgressFragment.t.isAlive()) {
+            ProgressFragment.t.interrupt();
+        }
     }
 
     /* Remove the locationlistener updates when Activity is paused */
@@ -205,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onPause() {
         super.onPause();
         mLocationManager.removeUpdates(this);
+        if(ProgressFragment.t.isAlive()) {
+            ProgressFragment.t.interrupt();
+        }
     }
 
     @Override
