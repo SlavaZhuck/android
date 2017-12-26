@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
 
 
 public class ProgressFragment extends Fragment {
@@ -61,41 +64,62 @@ public class ProgressFragment extends Fragment {
     public void onStop() {
         super.onStop();
         progressTask.cancel(true);
-        t.interrupt();
+        if(t.isAlive()) {
+            t.interrupt();
+        }
+        Log.v(TAG, "onStopProgress");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         progressTask.cancel(true);
-        t.interrupt();
+        if(t.isAlive()) {
+            t.interrupt();
+        }
+        Log.v(TAG, "onDestroyProgress");
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressTask.cancel(true);
+        if(t.isAlive()) {
+            t.interrupt();
+        }
+        Log.v(TAG, "onPauseProgress");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        progressTask = (ProgressTask) new ProgressTask().execute();
-        t = new Thread() {
+      //  if(!(progressTask.getStatus()== AsyncTask.Status.RUNNING)){
+            progressTask = (ProgressTask) new ProgressTask().execute();
+       // }
+//        if(!t.isAlive()){
+            t = new Thread() {
 
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
+                @Override
+                public void run() {
+                    try {
+                        while (!isInterrupted()) {
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // update TextView here!
-                                String elapsedTimeS = PrayFull.getTimeToNext();
-                                elapsedTime.setText(elapsedTimeS);
-                            }
-                        });
-                        Thread.sleep(1000);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // update TextView here!
+                                    String elapsedTimeS = PrayFull.getTimeToNext();
+                                    elapsedTime.setText(elapsedTimeS);
+                                }
+                            });
+                            Thread.sleep(1000);
+                        }
+                    } catch (InterruptedException e) {
                     }
-                } catch (InterruptedException e) {
                 }
-            }
-        };
+            };
+ //       }
         restoreData();
 
         //city = (TextView) this.getActivity().findViewById(R.id.city);
@@ -106,16 +130,11 @@ public class ProgressFragment extends Fragment {
         t.start();
         updateDataFields();
         lv.setAdapter(prayAdapter);
+        Log.v(TAG, "onResumeProgress");
     }
 
     public void updateDataFields() {
-        //if (mLastLocation != null) {
-        //    city.setText(mLastLocation);
-       // }else {
-       //     city.setText(R.string.unknown);
-        //}
-
-        //scheduleNotification(getNotification("20 second delay"), 20000);
+        Log.v(TAG, "UpdateFields");
         if (mPrayList.size() > 0) {
             mPrayList = PrayFull.getActualPrays(mPrayList);
 
@@ -133,6 +152,7 @@ public class ProgressFragment extends Fragment {
     }
 
     public void restoreData() {
+        Log.v(TAG, "RestoreData");
 
         MainActivity.Settings = this.getActivity().getSharedPreferences(MainActivity.APP_PREFERENCES, 0);
 
@@ -167,17 +187,9 @@ public class ProgressFragment extends Fragment {
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        progressTask.cancel(true);
-        t.interrupt();
-    }
-
-
-    @SuppressLint("StaticFieldLeak")
+   // @SuppressLint("StaticFieldLeak")
     private class ProgressTask extends AsyncTask<String, Void, String> {
-        @SuppressLint("DefaultLocale")
+    //    @SuppressLint("DefaultLocale")
         @Override
         protected String doInBackground(String... path) {
 

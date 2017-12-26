@@ -75,6 +75,8 @@ public class Pray {
     }
 
     public void setDate(Calendar date) {
-        mDate = date;
+        Calendar temp = date;
+        temp.setTimeInMillis(date.getTimeInMillis() + 3000);
+        mDate = temp;
     }
 }

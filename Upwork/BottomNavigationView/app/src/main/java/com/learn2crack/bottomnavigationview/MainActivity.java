@@ -19,16 +19,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import android.location.LocationListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private BottomNavigationView mBottomNavigationView;
     private Toolbar toolbar;
     private String mdateString;
+
+    //public abstract void setStatusBarColor (int color);
     // private Toolbar mAppToolBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,18 +108,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 switch (item.getItemId()) {
                     case R.id.navigation_start_page:
                         loadHomeFragment();
+                        Log.v(TAG, "loadHomeFragment");
                         return true;
                     case R.id.navigation_dua:
                         loadDuaFragment();
+                        Log.v(TAG, "loadDuaFragment");
                         return true;
                     case R.id.navigation_quran:
                         loadQuranFragment();
+                        Log.v(TAG, "loadQuranFragment");
                         return true;
                     case R.id.navigation_qibla:
                         loadNavigationFragment();
+                        Log.v(TAG, "loadNavigationFragment");
                         return true;
                     case R.id.navigation_more:
                         loadMoreFragment();
+                        Log.v(TAG, "loadMoreFragment");
                         return true;
                 }
                 return false;
@@ -177,6 +188,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onResume() {
         super.onResume();
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        View decorView = window.getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        window.setStatusBarColor(0xFFFFFF);
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

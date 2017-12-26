@@ -28,7 +28,7 @@ public class PrayFull {
             long minutes = ((mClosestPrayTime - currentTimeMils) / (1000 * 60)) % 60;
             long hours = ((mClosestPrayTime - currentTimeMils) / (1000 * 60 * 60)) % 24;
             // String formatted = String.format("H", hours);
-            String elapsedTimeS = new String("- " + String.format("%02d:%02d:%02d", hours, minutes,seconds));
+            String elapsedTimeS = new String(String.format("%02d:%02d:%02d", hours, minutes,seconds));
             return elapsedTimeS;
         }else{
             return "99:99:99";
