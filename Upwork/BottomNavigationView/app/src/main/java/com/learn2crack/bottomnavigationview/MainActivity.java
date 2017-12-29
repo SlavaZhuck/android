@@ -1,6 +1,7 @@
 package com.learn2crack.bottomnavigationview;
 
 import android.Manifest;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,13 +27,13 @@ import android.view.View;
 import android.location.LocationListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private BottomNavigationView mBottomNavigationView;
     private Toolbar toolbar;
     private String mdateString;
-
+    private String TAG = "myTag";
     //public abstract void setStatusBarColor (int color);
     // private Toolbar mAppToolBar;
     @Override
@@ -264,15 +265,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider,
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Enabled new provider " + provider,
+        //        Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider,
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Disabled provider " + provider,
+       //         Toast.LENGTH_SHORT).show();
     }
 
     public boolean requestPermission() {

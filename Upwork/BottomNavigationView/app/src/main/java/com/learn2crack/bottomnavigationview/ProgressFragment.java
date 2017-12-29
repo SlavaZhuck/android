@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static android.content.ContentValues.TAG;
 
 
 public class ProgressFragment extends Fragment {
@@ -41,6 +40,7 @@ public class ProgressFragment extends Fragment {
     private ArrayList<Pray> mPrayList = new ArrayList<>();
     private String mLastLocation;
     public static Thread t;
+    private String TAG = "myTag";
 
 
     @Override
@@ -94,32 +94,9 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-      //  if(!(progressTask.getStatus()== AsyncTask.Status.RUNNING)){
-            progressTask = (ProgressTask) new ProgressTask().execute();
-       // }
-//        if(!t.isAlive()){
-            t = new Thread() {
 
-                @Override
-                public void run() {
-                    try {
-                        while (!isInterrupted()) {
+        progressTask = (ProgressTask) new ProgressTask().execute();
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // update TextView here!
-                                    String elapsedTimeS = PrayFull.getTimeToNext();
-                                    elapsedTime.setText(elapsedTimeS);
-                                }
-                            });
-                            Thread.sleep(1000);
-                        }
-                    } catch (InterruptedException e) {
-                    }
-                }
-            };
- //       }
         restoreData();
 
         //city = (TextView) this.getActivity().findViewById(R.id.city);
@@ -127,27 +104,52 @@ public class ProgressFragment extends Fragment {
         nextPrayerTime = (TextView) this.getActivity().findViewById(R.id.nextPrayTime);
         elapsedTime = (TextView) this.getActivity().findViewById(R.id.elapsedTime);
 
-        t.start();
         updateDataFields();
         lv.setAdapter(prayAdapter);
+
+        t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here!
+                                String elapsedTimeS = PrayFull.getTimeToNext();
+                                if(elapsedTimeS!=null && elapsedTime!=null) {
+                                    elapsedTime.setText(elapsedTimeS);
+                                }
+                            }
+                        });
+                        Thread.sleep(1000);
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        t.start();
         Log.v(TAG, "onResumeProgress");
     }
 
     public void updateDataFields() {
         Log.v(TAG, "UpdateFields");
-        if (mPrayList.size() > 0) {
+        if(nextPrayer!= null && nextPrayerTime!= null && elapsedTime!= null && mPrayList!= null) {
             mPrayList = PrayFull.getActualPrays(mPrayList);
+            if (mPrayList.size() > 0) {
 
-            nextPrayer.setText(mPrayList.get(0).getName());
-            nextPrayerTime.setText(mPrayList.get(0).getTime());
+                nextPrayer.setText(mPrayList.get(0).getName());
+                nextPrayerTime.setText(mPrayList.get(0).getTime());
 
-            if((int)PrayFull.getTimeToNextInMillis()>0) {
-                scheduleNotification(getNotification(getResources().getString(R.string.Pray) + " " + mPrayList.get(0).getName() + " " + getResources().getString(R.string.Isnow),"Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
+                if ((int) PrayFull.getTimeToNextInMillis() > 0) {
+                    scheduleNotification(getNotification(getResources().getString(R.string.Pray) + " " + mPrayList.get(0).getName() + " " + getResources().getString(R.string.Isnow), "Notification for Pray"), (int) PrayFull.getTimeToNextInMillis());
+                }
+
+            } else {
+                nextPrayer.setText(R.string.unknown);
+                nextPrayerTime.setText(R.string.unknown);
+                elapsedTime.setText(R.string.unknown);
             }
-        } else {
-            nextPrayer.setText(R.string.unknown);
-            nextPrayerTime.setText(R.string.unknown);
-            elapsedTime.setText(R.string.unknown);
         }
     }
 
@@ -161,7 +163,7 @@ public class ProgressFragment extends Fragment {
         for (int i = 0; i < mLoadedArrayActualPrayString.length; i++)
             mLoadedArrayActualPrayString[i] = MainActivity.Settings.getString("prayArrayActual" + i, null); //заполняем элементы массив
 
-       // mLastLocation = new String();
+        mLastLocation = new String();
         if(MainActivity.Settings.getString("lastLocation", null)!= null){
             mLastLocation = MainActivity.Settings.getString("lastLocation", null);
         }else{

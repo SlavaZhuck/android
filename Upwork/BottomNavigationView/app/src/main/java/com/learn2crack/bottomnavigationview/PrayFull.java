@@ -14,9 +14,9 @@ import java.util.Date;
 
 public class PrayFull {
     //private static ArrayList<Pray> mPrayList = new ArrayList<Pray>();
-    public static long mClosestPrayTime;
-    public static long timeToNext;
-    public static long currentTimeMils;
+    public static long mClosestPrayTime =0;
+    public static long timeToNext = 0;
+    public static long currentTimeMils = 0;
 
     PrayFull() {
     }
